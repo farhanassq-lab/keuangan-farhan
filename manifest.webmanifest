@@ -1,15 +1,15 @@
 {
   "id": "./",
-  "name": "Mizan Finance — Keuangan & Tabungan",
-  "short_name": "Mizan Finance",
-  "description": "Kelola keuangan dan tabungan EGP dan IDR.",
+  "name": "Farhan Finance — Keuangan & Tabungan",
+  "short_name": "Farhan Finance",
+  "description": "Ruang keuangan personal untuk pemasukan, pengeluaran, tabungan, budget, EGP dan IDR.",
   "lang": "id-ID",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#F5F7FB",
-  "theme_color": "#0F172A",
+  "background_color": "#10152F",
+  "theme_color": "#10152F",
   "icons": [
     {
       "src": "./icons/icon-192.png",
