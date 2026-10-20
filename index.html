@@ -232,7 +232,7 @@
 
 
     /* === Farhan Finance V6 redesign overrides === */
-    @media (min-width:768px) { #mobileNav { display:none !important; } }
+    @media (min-width:1024px) { #mobileNav, #mobileMenuBackdrop, #mobileMenuSheet { display:none !important; } }
     body {
       background:
         radial-gradient(circle at 8% 0%, rgba(59,130,246,.13), transparent 30%),
@@ -368,10 +368,67 @@
     .tiny-label { letter-spacing:.16em; }
     .chart-wrap canvas { filter: drop-shadow(0 10px 18px rgba(30,64,175,.06)); }
 
+
+
+    /* === Farhan Finance V6.1: CV profile, accessible contrast and notification layering === */
+    #authScreen, #appShell { position:relative; z-index:1; }
+    #toastHost {
+      position:fixed !important; z-index:9999 !important; top:calc(env(safe-area-inset-top) + 1rem) !important;
+      right:1rem !important; left:auto !important; width:min(28rem,calc(100vw - 2rem)) !important;
+      max-width:28rem !important; pointer-events:none !important;
+    }
+    #toastHost > * { pointer-events:auto; }
+    .toast-in { pointer-events:auto; }
+    @media (min-width:1024px) { #mobileNav, #mobileMenuBackdrop, #mobileMenuSheet { display:none !important; } }
+    @media (max-width:1023px) { #mobileNav:not(.hidden) { display:block !important; } }
+
+    /* Stronger contrast for text inside pale cards; preserve the intentionally dark balance cards. */
+    .card:not(.v5-balance-card) .text-slate-900,
+    .card:not(.v5-balance-card) .text-slate-800 { color:#102347 !important; }
+    .card:not(.v5-balance-card) .text-slate-700 { color:#2c4568 !important; }
+    .card:not(.v5-balance-card) .text-slate-600 { color:#405776 !important; }
+    .card:not(.v5-balance-card) .text-slate-500 { color:#526783 !important; }
+    .card:not(.v5-balance-card) .text-slate-400 { color:#637995 !important; }
+    .report-stat .text-slate-900,.report-stat .text-slate-800 { color:#102347 !important; }
+    .report-stat .text-slate-500 { color:#526783 !important; }
+    .report-stat .text-slate-400 { color:#637995 !important; }
+    .field { color:#102347 !important; border-color:#bfd4f6 !important; background:linear-gradient(180deg,#fff,#f6f9ff) !important; }
+    .field::placeholder { color:#7b8ca8 !important; opacity:1; }
+    .field:focus { border-color:#3b82f6 !important; box-shadow:0 0 0 4px rgba(59,130,246,.13),0 8px 20px rgba(37,99,235,.06) !important; }
+    .profile-editor-card { background:radial-gradient(circle at 100% 0%,rgba(191,219,254,.30),transparent 25%),linear-gradient(145deg,#fff,#f4f8ff) !important; }
+    .cv-sheet { animation:page-in .36s ease both; }
+    .cv-cover {
+      background:radial-gradient(circle at 85% 0%,rgba(96,165,250,.34),transparent 28%),radial-gradient(circle at 0% 100%,rgba(34,211,238,.16),transparent 35%),linear-gradient(125deg,#07152f 0%,#12356f 55%,#3730a3 100%);
+      min-height:230px;
+    }
+    .cv-cover::after { content:'';position:absolute;inset:0;pointer-events:none;opacity:.20;background-image:radial-gradient(rgba(255,255,255,.42) .7px,transparent .7px);background-size:19px 19px;mask-image:linear-gradient(100deg,black,transparent 82%); }
+    .cv-cover-orb { position:absolute;border-radius:999px;border:1px solid rgba(255,255,255,.16);pointer-events:none; }
+    .cv-orb-one { width:260px;height:260px;right:-45px;top:-150px;box-shadow:0 0 0 24px rgba(255,255,255,.025),0 0 0 48px rgba(255,255,255,.02);animation:orbit-drift 15s ease-in-out infinite alternate; }
+    .cv-orb-two { width:150px;height:150px;right:20%;bottom:-115px;background:rgba(96,165,250,.10); }
+    .cv-avatar { box-shadow:0 0 0 5px rgba(255,255,255,.10),0 18px 35px rgba(0,0,0,.22) !important; }
+    .cv-contact-chip { display:inline-flex;max-width:100%;align-items:center;gap:6px;border:1px solid rgba(219,234,254,.24);border-radius:999px;background:rgba(255,255,255,.09);padding:7px 10px;color:#eff6ff;font-size:11px;font-weight:700;overflow-wrap:anywhere;backdrop-filter:blur(8px); }
+    .cv-contact-chip a { color:inherit; }
+    .cv-side-panel { background:linear-gradient(180deg,#f7faff,#f0f5ff); }
+    .cv-section-title { display:flex;align-items:center;gap:11px; }
+    .cv-section-icon { display:inline-flex;flex:none;align-items:center;justify-content:center;width:38px;height:38px;border-radius:13px;background:linear-gradient(145deg,#dbeafe,#e0e7ff);color:#1d4ed8;font-size:18px;font-weight:900;box-shadow:inset 0 0 0 1px rgba(147,197,253,.3); }
+    .cv-content-section { padding-bottom:3px; }
+    .cv-preview-copy { white-space:pre-line;overflow-wrap:anywhere;color:#415675;font-size:13px;line-height:1.8; }
+    .cv-placeholder { color:#8a9ab2 !important;font-style:italic; }
+    .cv-upload-button { box-shadow:0 8px 20px rgba(2,6,23,.12); }
+    .profile-page-heading { position:relative; }
+    .profile-page-heading::after { content:'';display:block;width:88px;height:4px;border-radius:99px;margin-top:14px;background:linear-gradient(90deg,#2563eb,#818cf8,#22d3ee); }
+    @media(max-width:640px) {
+      .cv-cover { min-height:0; }
+      .cv-cover .cv-contact-chip { font-size:10px; }
+      .cv-preview-copy { font-size:12px; }
+      #toastHost { top:calc(env(safe-area-inset-top) + .65rem) !important;right:.65rem !important;width:calc(100vw - 1.3rem) !important; }
+    }
+    @media(prefers-reduced-motion:reduce) { .cv-orb-one,.cv-sheet { animation:none !important; } }
+
 </style>
 </head>
 <body class="min-h-screen antialiased">
-  <div id="toastHost" class="fixed right-3 top-3 z-[200] flex w-[calc(100%-1.5rem)] max-w-sm flex-col gap-2" aria-live="polite"></div>
+  <div id="toastHost" class="fixed right-3 top-3 z-[9999] flex w-[calc(100%-1.5rem)] max-w-sm flex-col gap-2" aria-live="polite"></div>
 
   <!-- AUTH -->
   <main id="authScreen" class="glass-dark flex min-h-screen items-center justify-center px-4 py-10 text-white">
@@ -692,12 +749,70 @@
           <div class="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"><article class="card p-5 sm:p-6"><div class="mb-4"><p class="tiny-label text-indigo-600">SPENDING MIX</p><h3 class="mt-1 font-extrabold text-slate-900">Pengeluaran per kategori</h3><p class="mt-1 text-xs text-slate-500">Kategori dengan pengeluaran terbesar di periode terpilih.</p></div><div class="chart-wrap"><canvas id="reportCategoryChart" aria-label="Grafik pengeluaran berdasarkan kategori"></canvas></div><div id="reportCategoryList" class="mt-4 space-y-3"></div></article><article class="card p-5 sm:p-6"><div class="mb-4 flex flex-wrap items-center justify-between gap-2"><div><p class="tiny-label text-indigo-600">TRANSACTION REVIEW</p><h3 class="mt-1 font-extrabold text-slate-900">Aktivitas bulan ini</h3><p id="reportTransactionCount" class="mt-1 text-xs text-slate-500">0 transaksi</p></div><button class="text-xs font-bold text-indigo-600" onclick="showPage('transactions')">Buka riwayat →</button></div><div id="reportTransactionsList" class="space-y-2"><p class="text-sm text-slate-400">Belum ada transaksi pada periode ini.</p></div></article></div>
         </section>
 
-        <section id="page-profile" class="page-panel space-y-5">
-          <div><p class="tiny-label text-indigo-600">IDENTITAS AKUN</p><h2 class="mt-2 text-2xl font-extrabold text-slate-900">Profil saya</h2><p class="mt-2 text-sm text-slate-500">Personalisasi tampilan Farhan Finance dengan nama dan foto pilihanmu.</p></div>
-          <div class="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
-            <article class="glass-dark overflow-hidden rounded-3xl p-6 text-white"><div class="flex flex-col items-center text-center"><div class="avatar-frame h-28 w-28"><img id="profileAvatarPreview" class="avatar-img hidden" alt="Foto profil pengguna"><span id="profileAvatarFallback" class="avatar-fallback h-full w-full text-3xl">FF</span></div><h3 id="profilePreviewName" class="mt-4 text-xl font-extrabold">Pengguna Farhan</h3><p id="profilePreviewEmail" class="mt-1 max-w-full break-all text-xs text-slate-300">—</p><label for="avatarFile" class="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-bold transition hover:bg-white/15">↑ Unggah foto</label><input id="avatarFile" class="sr-only" type="file" accept="image/png,image/jpeg,image/webp" onchange="uploadAvatar(event)"><p class="mt-3 text-[10px] leading-5 text-slate-400">PNG, JPG, atau WEBP · maksimal 3 MB.</p></div></article>
-            <article class="card p-5 sm:p-6"><h3 class="mb-4 font-extrabold text-slate-900">Informasi profil</h3><form id="profileForm" class="space-y-4" onsubmit="saveProfile(event)"><div><label for="profileDisplayName" class="mb-1.5 block text-xs font-bold text-slate-600">Nama tampilan *</label><input id="profileDisplayName" class="field" maxlength="80" required placeholder="Nama yang ingin ditampilkan"></div><div><label for="profileEmailInput" class="mb-1.5 block text-xs font-bold text-slate-600">Email akun</label><input id="profileEmailInput" class="field bg-slate-50" type="email" readonly></div><div class="grid grid-cols-1 gap-3 sm:grid-cols-2"><div><label for="preferredCurrency" class="mb-1.5 block text-xs font-bold text-slate-600">Mata uang pilihan</label><select id="preferredCurrency" class="field"><option value="EGP">EGP · Pound Mesir</option><option value="IDR">IDR · Rupiah</option></select></div><div><label for="monthlySavingTarget" class="mb-1.5 block text-xs font-bold text-slate-600">Target tabungan bulanan</label><input id="monthlySavingTarget" class="field" type="number" min="0" step="0.01" placeholder="0"></div></div><p class="text-xs leading-5 text-slate-400">Target bulanan disimpan sebagai preferensi profil. Target tabungan per tujuan dikelola di halaman Target Tabungan.</p><button id="saveProfileBtn" class="btn-primary w-full" type="submit">Simpan profil</button></form><div class="mt-5 flex flex-wrap gap-2 border-t border-slate-100 pt-4"><button onclick="showPage('settings')" class="btn-quiet">Pengaturan akun & kurs</button><button onclick="signOut()" class="btn-quiet">Keluar akun</button></div></article>
+        <section id="page-profile" class="page-panel space-y-6">
+          <div class="profile-page-heading">
+            <p class="tiny-label text-blue-600">PERSONAL INTRODUCTION</p>
+            <h2 class="mt-2 text-2xl font-extrabold text-slate-900 sm:text-3xl">Profil & perkenalan</h2>
+            <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600">Buat halaman perkenalan seperti CV mini. Isi bagian yang kamu mau—tentang diri, pendidikan, pengalaman, keahlian, dan minat. Semua bagian perkenalan bersifat opsional.</p>
           </div>
+
+          <article class="cv-sheet overflow-hidden rounded-[28px] border border-blue-100 bg-white shadow-xl shadow-blue-950/5">
+            <div class="cv-cover relative overflow-hidden px-5 py-7 text-white sm:px-8 sm:py-9">
+              <div class="cv-cover-orb cv-orb-one"></div><div class="cv-cover-orb cv-orb-two"></div>
+              <div class="relative z-10 flex flex-col gap-5 sm:flex-row sm:items-center">
+                <div class="flex shrink-0 flex-col items-center gap-3 sm:items-start">
+                  <div class="avatar-frame cv-avatar h-28 w-28 sm:h-32 sm:w-32"><img id="profileAvatarPreview" class="avatar-img hidden" alt="Foto profil pengguna"><span id="profileAvatarFallback" class="avatar-fallback h-full w-full text-3xl">FF</span></div>
+                  <label for="avatarFile" class="cv-upload-button inline-flex cursor-pointer items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-xs font-extrabold text-white backdrop-blur-md transition hover:bg-white/20">↑ Unggah foto</label>
+                  <input id="avatarFile" class="sr-only" type="file" accept="image/png,image/jpeg,image/webp" onchange="uploadAvatar(event)">
+                  <p class="text-[10px] text-blue-100/75">PNG, JPG, WEBP · maks. 3 MB</p>
+                </div>
+                <div class="min-w-0 flex-1 text-center sm:text-left">
+                  <p class="tiny-label text-cyan-200">PROFILE / ABOUT ME</p>
+                  <h3 id="profilePreviewName" class="mt-2 break-words text-3xl font-extrabold tracking-tight sm:text-4xl">Nama kamu</h3>
+                  <p id="cvPreviewHeadline" class="mt-2 text-sm font-semibold leading-6 text-blue-100 sm:text-base">Tulis headline singkat tentang dirimu di formulir.</p>
+                  <div class="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+                    <span id="cvLocationChip" class="cv-contact-chip">⌖ <span id="cvPreviewLocation">Lokasi (opsional)</span></span>
+                    <span class="cv-contact-chip">✉ <span id="profilePreviewEmail">—</span></span>
+                    <a id="cvPreviewWebsiteLink" class="cv-contact-chip hidden" href="#" target="_blank" rel="noopener noreferrer">↗ Website / portfolio</a>
+                  </div>
+                  <p class="mt-4 text-xs leading-5 text-blue-100/70">Halaman perkenalan pribadi · Farhan Finance</p>
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 gap-0 md:grid-cols-[minmax(0,1.3fr)_minmax(240px,.7fr)]">
+              <div class="space-y-6 p-5 sm:p-7">
+                <section class="cv-content-section"><div class="cv-section-title"><span class="cv-section-icon">✦</span><div><p class="tiny-label text-blue-600">INTRODUCTION</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Tentang saya</h4></div></div><p id="cvPreviewBio" class="cv-preview-copy mt-3">Ceritakan dirimu dalam beberapa kalimat—misalnya latar belakang, hal yang kamu minati, dan tujuan yang ingin kamu capai.</p></section>
+                <section class="cv-content-section"><div class="cv-section-title"><span class="cv-section-icon">▤</span><div><p class="tiny-label text-blue-600">EDUCATION</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Pendidikan</h4></div></div><p id="cvPreviewEducation" class="cv-preview-copy mt-3">Tambahkan pendidikan, jurusan, institusi, atau tahun jika ingin ditampilkan.</p></section>
+                <section class="cv-content-section"><div class="cv-section-title"><span class="cv-section-icon">↗</span><div><p class="tiny-label text-blue-600">EXPERIENCE</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Pengalaman & aktivitas</h4></div></div><p id="cvPreviewExperience" class="cv-preview-copy mt-3">Tambahkan pengalaman kerja, magang, organisasi, proyek, atau aktivitas yang relevan.</p></section>
+              </div>
+              <aside class="cv-side-panel space-y-6 border-t border-blue-100 p-5 sm:p-7 md:border-l md:border-t-0">
+                <section><div class="cv-section-title"><span class="cv-section-icon">✧</span><div><p class="tiny-label text-blue-600">SKILLS</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Keahlian</h4></div></div><p id="cvPreviewSkills" class="cv-preview-copy mt-3">Tuliskan keahlian yang kamu miliki, pisahkan dengan koma.</p></section>
+                <section><div class="cv-section-title"><span class="cv-section-icon">♡</span><div><p class="tiny-label text-blue-600">INTERESTS</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Minat</h4></div></div><p id="cvPreviewInterests" class="cv-preview-copy mt-3">Tuliskan minat, bidang yang ingin dipelajari, atau hobi.</p></section>
+                <div class="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-4"><p class="text-xs font-extrabold text-blue-900">Tips mengisi profil</p><p class="mt-2 text-xs leading-5 text-blue-800">Gunakan kalimat singkat dan jujur. Kamu bisa mengosongkan bagian yang belum ingin ditampilkan.</p></div>
+              </aside>
+            </div>
+          </article>
+
+          <article class="card profile-editor-card p-5 sm:p-7">
+            <div class="mb-5 flex flex-col gap-3 border-b border-blue-100 pb-5 sm:flex-row sm:items-center sm:justify-between"><div><p class="tiny-label text-blue-600">EDIT YOUR PROFILE</p><h3 class="mt-1 text-xl font-extrabold text-slate-900">Isi informasi perkenalan</h3><p class="mt-1 text-sm text-slate-600">Ketik teksmu sendiri. Pratinjau di atas akan berubah langsung sebelum disimpan.</p></div><span class="rounded-full border border-blue-100 bg-blue-50 px-3 py-1.5 text-xs font-extrabold text-blue-700">CV mini</span></div>
+            <form id="profileForm" class="space-y-6" onsubmit="saveProfile(event)">
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div><label for="profileDisplayName" class="mb-1.5 block text-xs">Nama lengkap / nama tampilan *</label><input id="profileDisplayName" class="field" maxlength="80" required placeholder="Tulis nama yang ingin ditampilkan"></div>
+                <div><label for="profileHeadline" class="mb-1.5 block text-xs">Headline / peran singkat</label><input id="profileHeadline" class="field" maxlength="140" placeholder="Contoh: Mahasiswa · Desainer · Developer"></div>
+                <div><label for="profileLocation" class="mb-1.5 block text-xs">Kota / lokasi (opsional)</label><input id="profileLocation" class="field" maxlength="120" placeholder="Contoh: Medan, Indonesia"></div>
+                <div><label for="profileWebsite" class="mb-1.5 block text-xs">Website / portfolio (opsional)</label><input id="profileWebsite" class="field" type="url" maxlength="240" placeholder="https://website-atau-portfolio.com"></div>
+              </div>
+              <div><label for="profileBio" class="mb-1.5 block text-xs">Tentang saya</label><textarea id="profileBio" class="field min-h-[112px] resize-y" maxlength="1500" placeholder="Perkenalkan dirimu dalam beberapa kalimat..."></textarea><p class="mt-1 text-right text-[10px] text-slate-500"><span id="profileBioCount">0</span>/1500</p></div>
+              <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <div><label for="profileEducation" class="mb-1.5 block text-xs">Pendidikan</label><textarea id="profileEducation" class="field min-h-[100px] resize-y" maxlength="1200" placeholder="Institusi, jurusan, tahun, atau kursus..."></textarea></div>
+                <div><label for="profileExperience" class="mb-1.5 block text-xs">Pengalaman & aktivitas</label><textarea id="profileExperience" class="field min-h-[100px] resize-y" maxlength="1600" placeholder="Pengalaman kerja, magang, organisasi, atau proyek..."></textarea></div>
+                <div><label for="profileSkills" class="mb-1.5 block text-xs">Keahlian</label><textarea id="profileSkills" class="field min-h-[90px] resize-y" maxlength="1000" placeholder="Contoh: komunikasi, desain, pemrograman, jaringan"></textarea></div>
+                <div><label for="profileInterests" class="mb-1.5 block text-xs">Minat / hobi</label><textarea id="profileInterests" class="field min-h-[90px] resize-y" maxlength="1000" placeholder="Hal yang kamu sukai atau ingin pelajari..."></textarea></div>
+              </div>
+              <div class="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50/90 to-indigo-50/80 p-4 sm:p-5"><div class="mb-4"><p class="tiny-label text-blue-600">ACCOUNT PREFERENCES</p><h4 class="mt-1 font-extrabold text-slate-900">Preferensi keuangan</h4></div><div class="grid grid-cols-1 gap-4 md:grid-cols-2"><div><label for="profileEmailInput" class="mb-1.5 block text-xs">Email akun</label><input id="profileEmailInput" class="field" type="email" readonly></div><div><label for="preferredCurrency" class="mb-1.5 block text-xs">Mata uang pilihan</label><select id="preferredCurrency" class="field"><option value="EGP">EGP · Pound Mesir</option><option value="IDR">IDR · Rupiah</option></select></div><div><label for="monthlySavingTarget" class="mb-1.5 block text-xs">Target tabungan bulanan</label><input id="monthlySavingTarget" class="field" type="number" min="0" step="0.01" placeholder="0"></div></div><p class="mt-3 text-xs leading-5 text-blue-800">Bagian CV bersifat opsional. Target tabungan per tujuan tetap dikelola di halaman Target Tabungan.</p></div>
+              <div class="flex flex-col gap-3 border-t border-blue-100 pt-5 sm:flex-row"><button id="saveProfileBtn" class="btn-primary w-full sm:flex-1" type="submit">Simpan profil & perkenalan</button><button type="button" onclick="showPage('settings')" class="btn-quiet">Pengaturan akun & kurs</button><button type="button" onclick="signOut()" class="btn-quiet">Keluar akun</button></div>
+            </form>
+          </article>
         </section>
 
         <section id="page-settings" class="page-panel space-y-5">
@@ -853,6 +968,8 @@
     let avatarSignedUrl = '';
     let v2SchemaReady = false;
     let v2WarningShown = false;
+    let v6ProfileSchemaReady = false;
+    let v6ProfileWarningShown = false;
 
     document.addEventListener('DOMContentLoaded', init);
 
@@ -869,6 +986,12 @@
       document.getElementById('transactionNote').addEventListener('input', () => {
         setText('noteCount', document.getElementById('transactionNote').value.length);
       });
+      ['profileDisplayName','profileHeadline','profileLocation','profileWebsite','profileBio','profileEducation','profileExperience','profileSkills','profileInterests'].forEach(id => {
+        const field = document.getElementById(id);
+        if (field) field.addEventListener('input', renderCvPreviewFromForm);
+      });
+      const profileBioField = document.getElementById('profileBio');
+      if (profileBioField) profileBioField.addEventListener('input', () => setText('profileBioCount', profileBioField.value.length));
       document.getElementById('transactionModal').addEventListener('click', e => {
         if (e.target.id === 'transactionModal') closeModal('transactionModal');
       });
@@ -1620,7 +1743,7 @@
       const host = document.getElementById('toastHost');
       const style = { success:'border-emerald-200 text-emerald-800', error:'border-rose-200 text-rose-800', info:'border-indigo-200 text-indigo-800' }[type] || 'border-slate-200 text-slate-800';
       const toast = document.createElement('div');
-      toast.className = `toast-in flex items-start gap-3 rounded-2xl border bg-white px-4 py-3 shadow-xl ${style}`;
+      toast.className = `toast-in pointer-events-auto flex items-start gap-3 rounded-2xl border bg-white px-4 py-3 shadow-xl ${style}`;
       const icon = type==='success'?'✓':type==='error'?'!':'i';
       const mark = document.createElement('span');
       mark.className = 'flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-extrabold';
@@ -1641,23 +1764,45 @@
     async function loadV2Data() {
       if (!sb || !currentUser) return;
       try {
-        const [profileResult, goalsResult, budgetsResult] = await Promise.all([
-          sb.from('profiles').select('id,email,full_name,display_name,avatar_path,preferred_currency,monthly_saving_target').eq('id', currentUser.id).maybeSingle(),
+        const [goalsResult, budgetsResult] = await Promise.all([
           sb.from('saving_goals').select('*').order('created_at', { ascending: false }),
           sb.from('budgets').select('*').order('month_start', { ascending: false })
         ]);
-        for (const result of [profileResult, goalsResult, budgetsResult]) if (result.error) throw result.error;
+        if (goalsResult.error) throw goalsResult.error;
+        if (budgetsResult.error) throw budgetsResult.error;
+
+        const extendedProfile = await sb.from('profiles')
+          .select('id,email,full_name,display_name,avatar_path,preferred_currency,monthly_saving_target,headline,location,website_url,bio,education,experience,skills,interests')
+          .eq('id', currentUser.id).maybeSingle();
+        let profileResult = extendedProfile;
+        v6ProfileSchemaReady = !extendedProfile.error;
+        if (extendedProfile.error && /column .* does not exist|schema cache|could not find the .* column/i.test(String(extendedProfile.error.message || ''))) {
+          profileResult = await sb.from('profiles')
+            .select('id,email,full_name,display_name,avatar_path,preferred_currency,monthly_saving_target')
+            .eq('id', currentUser.id).maybeSingle();
+          v6ProfileSchemaReady = false;
+        }
+        if (profileResult.error) throw profileResult.error;
         profileData = profileResult.data || {
           id: currentUser.id, email: currentUser.email || '', full_name: '', display_name: '',
-          avatar_path: null, preferred_currency: 'EGP', monthly_saving_target: 0
+          avatar_path: null, preferred_currency: 'EGP', monthly_saving_target: 0,
+          headline:'', location:'', website_url:'', bio:'', education:'', experience:'', skills:'', interests:''
         };
+        ['headline','location','website_url','bio','education','experience','skills','interests'].forEach(key => {
+          if (profileData[key] == null) profileData[key] = '';
+        });
         savingGoals = goalsResult.data || [];
         budgets = budgetsResult.data || [];
         v2SchemaReady = true;
         await refreshAvatarUrl();
+        if (!v6ProfileSchemaReady && !v6ProfileWarningShown) {
+          v6ProfileWarningShown = true;
+          showToast('Untuk menyimpan isi CV, jalankan supabase/v6_profile_migration.sql terlebih dahulu. Fitur profil dasar tetap aktif.', 'info');
+        }
       } catch (error) {
-        // Keep the existing core dashboard usable if the V2 migration has not been applied yet.
+        // Keep the core dashboard usable if V2 schema is not installed.
         v2SchemaReady = false;
+        v6ProfileSchemaReady = false;
         savingGoals = [];
         budgets = [];
         avatarSignedUrl = '';
@@ -1666,12 +1811,13 @@
           email: currentUser.email || '',
           full_name: (currentUser.user_metadata && currentUser.user_metadata.full_name) || '',
           display_name: (currentUser.user_metadata && currentUser.user_metadata.full_name) || '',
-          avatar_path: null, preferred_currency: 'EGP', monthly_saving_target: 0
+          avatar_path: null, preferred_currency: 'EGP', monthly_saving_target: 0,
+          headline:'', location:'', website_url:'', bio:'', education:'', experience:'', skills:'', interests:''
         };
         if (!v2WarningShown) {
           v2WarningShown = true;
           console.warn('Farhan Finance V2 schema is not ready:', error);
-          showToast('Fitur V2 belum aktif. Jalankan supabase/v2_migration.sql di Supabase SQL Editor.', 'info');
+          showToast('Fitur profil, target, atau budget belum aktif. Periksa migrasi V2 di Supabase SQL Editor.', 'info');
         }
       }
     }
@@ -1707,8 +1853,15 @@
       setText('profilePreviewName', name);
       setText('profilePreviewEmail', currentUser ? currentUser.email || 'Email tidak tersedia' : '—');
       setText('profileEmail', currentUser ? currentUser.email || 'Email tidak tersedia' : '—');
-      const displayNameInput = document.getElementById('profileDisplayName');
-      if (displayNameInput && document.activeElement !== displayNameInput) displayNameInput.value = name;
+      const fieldBindings = [
+        ['profileDisplayName','display_name'], ['profileHeadline','headline'], ['profileLocation','location'],
+        ['profileWebsite','website_url'], ['profileBio','bio'], ['profileEducation','education'],
+        ['profileExperience','experience'], ['profileSkills','skills'], ['profileInterests','interests']
+      ];
+      fieldBindings.forEach(([id,key]) => {
+        const input = document.getElementById(id);
+        if (input && document.activeElement !== input) input.value = (profileData && profileData[key]) || (key === 'display_name' ? name : '');
+      });
       const profileEmailInput = document.getElementById('profileEmailInput');
       if (profileEmailInput && currentUser) profileEmailInput.value = currentUser.email || '';
       const preferred = document.getElementById('preferredCurrency');
@@ -1731,6 +1884,51 @@
           image.nextElementSibling && image.nextElementSibling.classList.remove('hidden');
         }
       });
+      const bioCounter = document.getElementById('profileBioCount');
+      const bioField = document.getElementById('profileBio');
+      if (bioCounter && bioField) setText('profileBioCount', bioField.value.length);
+      renderCvPreviewFromForm();
+    }
+
+    function renderCvPreviewFromForm() {
+      const valueFrom = (id, key) => {
+        const input = document.getElementById(id);
+        if (input) return input.value.trim();
+        return String((profileData && profileData[key]) || '').trim();
+      };
+      const previewText = (previewId, value, placeholder) => {
+        const el = document.getElementById(previewId);
+        if (!el) return;
+        el.textContent = value || placeholder;
+        el.classList.toggle('cv-placeholder', !value);
+      };
+      const name = valueFrom('profileDisplayName','display_name') || profileDisplayName();
+      setText('profilePreviewName', name);
+      previewText('cvPreviewHeadline', valueFrom('profileHeadline','headline'), 'Headline singkat tentang dirimu akan tampil di sini.');
+      previewText('cvPreviewLocation', valueFrom('profileLocation','location'), 'Lokasi (opsional)');
+      previewText('cvPreviewBio', valueFrom('profileBio','bio'), 'Ceritakan dirimu dalam beberapa kalimat—misalnya latar belakang, hal yang kamu minati, dan tujuan yang ingin kamu capai.');
+      previewText('cvPreviewEducation', valueFrom('profileEducation','education'), 'Tambahkan pendidikan, jurusan, institusi, atau tahun jika ingin ditampilkan.');
+      previewText('cvPreviewExperience', valueFrom('profileExperience','experience'), 'Tambahkan pengalaman kerja, magang, organisasi, proyek, atau aktivitas yang relevan.');
+      previewText('cvPreviewSkills', valueFrom('profileSkills','skills'), 'Tuliskan keahlian yang kamu miliki, pisahkan dengan koma.');
+      previewText('cvPreviewInterests', valueFrom('profileInterests','interests'), 'Tuliskan minat, bidang yang ingin dipelajari, atau hobi.');
+      const locationChip = document.getElementById('cvLocationChip');
+      if (locationChip) locationChip.classList.toggle('hidden', !valueFrom('profileLocation','location'));
+      const websiteValue = valueFrom('profileWebsite','website_url');
+      const websiteLink = document.getElementById('cvPreviewWebsiteLink');
+      if (websiteLink) {
+        let safeUrl = '';
+        if (websiteValue) {
+          try {
+            const parsed = new URL(websiteValue);
+            if (parsed.protocol === 'https:' || parsed.protocol === 'http:') safeUrl = parsed.href;
+          } catch (_) {}
+        }
+        websiteLink.href = safeUrl || '#';
+        websiteLink.classList.toggle('hidden', !safeUrl);
+      }
+      const bioCounter = document.getElementById('profileBioCount');
+      const bioField = document.getElementById('profileBio');
+      if (bioCounter && bioField) setText('profileBioCount', bioField.value.length);
     }
 
     async function saveProfile(event) {
@@ -1740,7 +1938,26 @@
       const displayName = document.getElementById('profileDisplayName').value.trim();
       const preferredCurrency = document.getElementById('preferredCurrency').value;
       const monthlyTarget = Number(document.getElementById('monthlySavingTarget').value || 0);
+      const cvFields = {
+        headline: document.getElementById('profileHeadline').value.trim(),
+        location: document.getElementById('profileLocation').value.trim(),
+        website_url: document.getElementById('profileWebsite').value.trim(),
+        bio: document.getElementById('profileBio').value.trim(),
+        education: document.getElementById('profileEducation').value.trim(),
+        experience: document.getElementById('profileExperience').value.trim(),
+        skills: document.getElementById('profileSkills').value.trim(),
+        interests: document.getElementById('profileInterests').value.trim()
+      };
       if (!displayName || displayName.length > 80 || !Number.isFinite(monthlyTarget) || monthlyTarget < 0) return showToast('Nama atau target bulanan tidak valid.', 'error');
+      if (cvFields.website_url) {
+        try {
+          const website = new URL(cvFields.website_url);
+          if (!['http:', 'https:'].includes(website.protocol)) throw new Error('invalid protocol');
+        } catch (_) { return showToast('Masukkan URL website dengan format lengkap, misalnya https://contoh.com.', 'error'); }
+      }
+      if (!v6ProfileSchemaReady && Object.values(cvFields).some(Boolean)) {
+        return showToast('Jalankan supabase/v6_profile_migration.sql di Supabase terlebih dahulu agar isi CV bisa disimpan.', 'error');
+      }
       setSaving(true, 'saveProfileBtn', 'Menyimpan profil...');
       try {
         const payload = {
@@ -1751,13 +1968,14 @@
           preferred_currency: preferredCurrency,
           monthly_saving_target: monthlyTarget
         };
+        if (v6ProfileSchemaReady) Object.assign(payload, cvFields);
         const { error } = await sb.from('profiles').upsert(payload, { onConflict: 'id' });
         if (error) throw error;
         profileData = { ...(profileData || {}), ...payload };
         renderProfileHeader();
-        showToast('Profil berhasil diperbarui.', 'success');
+        showToast('Profil dan perkenalan berhasil disimpan.', 'success');
       } catch (error) { showToast(friendlyError(error), 'error'); }
-      finally { setSaving(false, 'saveProfileBtn', 'Simpan profil'); }
+      finally { setSaving(false, 'saveProfileBtn', 'Simpan profil & perkenalan'); }
     }
 
     async function uploadAvatar(event) {

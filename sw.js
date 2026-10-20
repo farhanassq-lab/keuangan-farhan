@@ -1,4 +1,4 @@
-const CACHE_NAME = 'farhan-finance-shell-v6';
+const CACHE_NAME = 'farhan-finance-shell-v6-1';
 const APP_SHELL = [
   './',
   './index.html',
