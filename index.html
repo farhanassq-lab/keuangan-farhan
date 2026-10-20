@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#10152F">
-  <meta name="description" content="Farhan Finance V6.3 — PIN-first login, profil CV di awal dashboard, editor terpisah, field kosong disembunyikan, dan perbaikan PWA mobile.">
+  <meta name="description" content="Farhan Finance V7 — kelola akun BSI, Dompet Rupiah, Dompet Mesir, serta penukaran IDR–EGP dengan kurs dan biaya aktual.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <title>Farhan Finance — Personal Finance V6.3</title>
+  <title>Farhan Finance — Wallet & Currency Exchange V7</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -557,6 +557,46 @@
       #page-dashboard #dashboardProfileSection { scroll-margin-top:78px; }
     }
 
+
+    /* Farhan Finance V7: personal wallet & currency exchange */
+    .wallet-hero{background:radial-gradient(circle at 92% 0%,rgba(34,211,238,.22),transparent 25%),radial-gradient(circle at 10% 100%,rgba(99,102,241,.28),transparent 35%),linear-gradient(130deg,#08152f 0%,#123b78 54%,#3730a3 100%);border:1px solid rgba(147,197,253,.28)}
+    .wallet-orb{position:absolute;border:1px solid rgba(255,255,255,.13);border-radius:999px;pointer-events:none}
+    .wallet-orb-one{width:210px;height:210px;right:-45px;top:-80px;box-shadow:0 0 0 24px rgba(255,255,255,.025),0 0 0 48px rgba(255,255,255,.02);animation:wallet-float 13s ease-in-out infinite alternate}
+    .wallet-orb-two{width:110px;height:110px;right:24%;bottom:-76px;background:rgba(34,211,238,.08);filter:blur(1px)}
+    @keyframes wallet-float{from{transform:translate3d(0,0,0) rotate(0)}to{transform:translate3d(-10px,13px,0) rotate(8deg)}}
+    .wallet-hero-mini{border:1px solid rgba(191,219,254,.18);border-radius:18px;padding:14px 15px;background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.045));backdrop-filter:blur(12px)}
+    .wallet-hero-button{border:1px solid rgba(255,255,255,.23);border-radius:14px;padding:11px 14px;font-size:12px;font-weight:800;color:#eff6ff;background:rgba(255,255,255,.09);transition:transform .18s ease,background .18s ease}
+    .wallet-hero-button:hover{background:rgba(255,255,255,.16);transform:translateY(-1px)}
+    .wallet-hero-button-primary{background:linear-gradient(135deg,#38bdf8,#4f46e5);border-color:transparent;box-shadow:0 10px 22px rgba(37,99,235,.24)}
+    .wallet-panel{border-color:#d7e5fb;background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(246,250,255,.98));box-shadow:0 16px 38px rgba(30,64,175,.055)}
+    .wallet-panel-icon{display:flex;width:44px;height:44px;flex-shrink:0;align-items:center;justify-content:center;border-radius:15px;background:linear-gradient(135deg,#dbeafe,#e0e7ff);color:#1d4ed8;font-size:24px;font-weight:900;box-shadow:inset 0 0 0 1px rgba(147,197,253,.4)}
+    .wallet-direction-strip,.exchange-direction-strip{display:flex;align-items:center;gap:10px;border:1px solid #cfe0ff;border-radius:16px;background:linear-gradient(100deg,#eff6ff,#eef2ff);padding:11px 13px;font-size:12px;font-weight:900;color:#1e40af}
+    .exchange-direction-arrow{display:flex;height:26px;width:26px;align-items:center;justify-content:center;border-radius:9px;background:#2563eb;color:#fff;font-size:16px;box-shadow:0 4px 12px rgba(37,99,235,.2)}
+    .exchange-rate-preview{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #bfdbfe;border-radius:18px;background:radial-gradient(circle at 100% 0%,rgba(191,219,254,.45),transparent 40%),linear-gradient(135deg,#f8fbff,#eef4ff);padding:14px}
+    .wallet-account-card{border:1px solid #dbe7f8;border-radius:22px;padding:17px;background:linear-gradient(160deg,#fff,#f4f8ff);box-shadow:0 12px 28px rgba(30,64,175,.05);transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+    .wallet-account-card:hover{transform:translateY(-3px);border-color:#93c5fd;box-shadow:0 18px 34px rgba(37,99,235,.09)}
+    .wallet-account-icon{display:flex;height:44px;min-width:44px;align-items:center;justify-content:center;border-radius:15px;background:linear-gradient(135deg,#dbeafe,#c7d2fe);color:#1d4ed8;font-size:13px;font-weight:900}
+    .wallet-account-egp .wallet-account-icon{background:linear-gradient(135deg,#ede9fe,#ddd6fe);color:#6d28d9}
+    .wallet-account-bank .wallet-account-icon{background:linear-gradient(135deg,#dbeafe,#bfdbfe);color:#1e40af}
+    .wallet-currency-pill{display:inline-flex;align-items:center;border:1px solid #dbeafe;border-radius:999px;background:#eff6ff;padding:4px 8px;color:#1d4ed8;font-size:9px;font-weight:900;letter-spacing:.04em}
+    .wallet-flow-step{display:flex;align-items:flex-start;gap:11px}
+    .wallet-flow-number{display:flex;height:27px;width:27px;flex-shrink:0;align-items:center;justify-content:center;border-radius:10px;background:linear-gradient(135deg,#2563eb,#4f46e5);color:#fff;font-size:11px;font-weight:900;box-shadow:0 5px 12px rgba(37,99,235,.17)}
+    .wallet-exchange-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;border:1px solid #e0eaf9;border-radius:18px;background:linear-gradient(120deg,#fff,#f7faff);padding:13px;transition:border-color .18s ease,transform .18s ease}
+    .wallet-exchange-row:hover{border-color:#93c5fd;transform:translateY(-1px)}
+    .wallet-exchange-icon{display:flex;height:38px;width:38px;flex-shrink:0;align-items:center;justify-content:center;border-radius:13px;background:linear-gradient(135deg,#dbeafe,#e0e7ff);color:#1d4ed8;font-size:20px;font-weight:900}
+    .wallet-empty-state{border:1px dashed #bfdbfe;border-radius:20px;background:linear-gradient(135deg,#f8fbff,#eef4ff);padding:28px 16px;text-align:center}
+    .wallet-empty-state>span{display:inline-flex;height:46px;width:46px;align-items:center;justify-content:center;border-radius:15px;background:#dbeafe;color:#1d4ed8;font-size:24px}
+    @media(max-width:640px){.exchange-rate-preview{align-items:flex-start;flex-direction:column}.wallet-exchange-row{flex-direction:column}.wallet-exchange-row>div:last-child{display:flex;width:100%;flex-wrap:wrap;align-items:center;justify-content:space-between;text-align:left}.wallet-hero-mini p:nth-child(2){font-size:18px}}
+
+    html.dark-mode .wallet-account-card, html.dark-mode .wallet-exchange-row { background:linear-gradient(150deg,#122442,#0d1a31) !important;border-color:#294366 !important;color:#dbeafe;box-shadow:0 12px 28px rgba(0,0,0,.16) !important; }
+    html.dark-mode .wallet-account-card .text-slate-950, html.dark-mode .wallet-exchange-row .text-slate-900, html.dark-mode .wallet-account-card .text-slate-800 { color:#eef4ff !important; }
+    html.dark-mode .wallet-account-card .text-slate-500, html.dark-mode .wallet-exchange-row .text-slate-500, html.dark-mode .wallet-exchange-row .text-slate-400 { color:#9db1d0 !important; }
+    html.dark-mode .exchange-direction-strip, html.dark-mode .exchange-rate-preview, html.dark-mode .wallet-empty-state { background:linear-gradient(135deg,#122847,#101e39) !important;border-color:#2a4770 !important;color:#dbeafe !important; }
+    html.dark-mode .wallet-empty-state p, html.dark-mode .exchange-rate-preview .text-slate-900 { color:#eaf2ff !important; }
+    html.dark-mode .wallet-currency-pill { background:#172e52 !important;border-color:#355582 !important;color:#bfdbfe !important; }
+
+    @media(prefers-reduced-motion:reduce){.wallet-orb-one{animation:none}.wallet-account-card,.wallet-exchange-row,.wallet-hero-button{transition:none}}
+
 </style>
 </head>
 <body class="min-h-screen antialiased">
@@ -678,6 +718,7 @@
       <nav class="space-y-1">
         <button class="nav-link active" data-page="dashboard" onclick="showPage('dashboard')"><span>◫</span> Dashboard</button>
         <button class="nav-link" data-page="transactions" onclick="showPage('transactions')"><span>⇄</span> Transaksi</button>
+        <button class="nav-link" data-page="wallets" onclick="showPage('wallets')"><span>◈</span> Dompet & Penukaran</button>
         <button class="nav-link" data-page="goals" onclick="showPage('goals')"><span>◎</span> Target tabungan</button>
         <button class="nav-link" data-page="budgets" onclick="showPage('budgets')"><span>▤</span> Budget bulanan</button>
         <button class="nav-link" onclick="openDashboardProfile()"><span>◉</span> Perkenalan</button>
@@ -1016,6 +1057,65 @@
 
         
 
+        <section id="page-wallets" class="page-panel space-y-5">
+          <div class="wallet-hero relative overflow-hidden rounded-[28px] p-5 text-white shadow-xl sm:p-7">
+            <div class="wallet-orb wallet-orb-one"></div><div class="wallet-orb wallet-orb-two"></div>
+            <div class="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+              <div class="max-w-2xl"><p class="tiny-label text-cyan-200">WALLET & CURRENCY EXCHANGE</p><h2 class="mt-2 text-2xl font-black sm:text-3xl">Uang Indonesia sampai Mesir, tercatat rapi.</h2><p class="mt-2 max-w-xl text-sm leading-6 text-blue-100/85">Catat kiriman orang tua, uang tunai, dan penukaran IDR ↔ EGP tanpa membuat penukaran terlihat sebagai pemasukan atau pengeluaran konsumsi.</p></div>
+              <div class="flex flex-wrap gap-2"><button type="button" onclick="showPage('settings')" class="wallet-hero-button">Kelola akun</button><button type="button" onclick="document.getElementById('exchangeSourceAmount').focus({preventScroll:true});document.getElementById('exchangeFormCard').scrollIntoView({behavior:'smooth',block:'start'})" class="wallet-hero-button wallet-hero-button-primary">＋ Catat penukaran</button></div>
+            </div>
+            <div class="relative z-10 mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <div class="wallet-hero-mini"><p class="text-[11px] font-bold uppercase tracking-[.14em] text-blue-200">IDR · Rekening</p><p id="walletHeroBsi" class="mt-2 break-words text-xl font-black">Rp 0</p><p class="mt-1 text-[11px] text-blue-100/70">BSI</p></div>
+              <div class="wallet-hero-mini"><p class="text-[11px] font-bold uppercase tracking-[.14em] text-teal-100">IDR · Tunai</p><p id="walletHeroIdrCash" class="mt-2 break-words text-xl font-black">Rp 0</p><p class="mt-1 text-[11px] text-blue-100/70">Dompet Rupiah</p></div>
+              <div class="wallet-hero-mini"><p class="text-[11px] font-bold uppercase tracking-[.14em] text-violet-100">EGP · Tunai</p><p id="walletHeroEgpCash" class="mt-2 break-words text-xl font-black">ج.م 0</p><p class="mt-1 text-[11px] text-blue-100/70">Dompet Mesir</p></div>
+            </div>
+          </div>
+
+          <div id="walletOverview" class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3" aria-label="Saldo semua dompet"><p class="text-sm text-slate-500">Memuat dompet...</p></div>
+
+          <div class="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.15fr)_minmax(340px,.85fr)]">
+            <article id="exchangeFormCard" class="card wallet-panel p-4 sm:p-6">
+              <div class="mb-5 flex items-start gap-3"><div class="wallet-panel-icon"><span>⇄</span></div><div><p class="tiny-label text-blue-600">NEW EXCHANGE</p><h3 class="mt-1 text-lg font-extrabold text-slate-900">Catat penukaran mata uang</h3><p class="mt-1 text-xs leading-5 text-slate-500">Masukkan jumlah yang ditukar dan jumlah yang benar-benar diterima dari money changer atau layanan penukaran.</p></div></div>
+              <form id="currencyExchangeForm" class="space-y-4" onsubmit="submitCurrencyExchange(event)">
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div><label for="exchangeMethod" class="mb-1.5 block text-xs">Cara penukaran</label><select id="exchangeMethod" class="field" onchange="onExchangeMethodChange()"><option value="cash_money_changer">Tunai di money changer</option><option value="bank_or_transfer">Melalui rekening / transfer</option><option value="exchange_service">Layanan penukaran</option><option value="other">Cara lainnya</option></select></div>
+                  <div><label for="exchangeDate" class="mb-1.5 block text-xs">Tanggal penukaran</label><input id="exchangeDate" class="field" type="date" required></div>
+                </div>
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div><label for="exchangeSourceAccount" class="mb-1.5 block text-xs">Uang diambil dari *</label><select id="exchangeSourceAccount" class="field" required onchange="updateExchangeAccountOptions('source')"></select><p id="exchangeSourceHint" class="mt-1 text-[10px] text-slate-500">Akun sumber.</p></div>
+                  <div><label for="exchangeDestinationAccount" class="mb-1.5 block text-xs">Uang diterima ke *</label><select id="exchangeDestinationAccount" class="field" required onchange="updateExchangePreview()"></select><p id="exchangeDestinationHint" class="mt-1 text-[10px] text-slate-500">Akun tujuan dengan mata uang berbeda.</p></div>
+                </div>
+                <div class="exchange-direction-strip"><span id="exchangeDirectionFrom">IDR</span><span class="exchange-direction-arrow">⇢</span><span id="exchangeDirectionTo">EGP</span><span class="ml-auto text-[10px] font-bold text-blue-700">TRANSFER, BUKAN PEMASUKAN</span></div>
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div><label for="exchangeSourceAmount" class="mb-1.5 block text-xs">Nominal yang ditukar *</label><div class="relative"><span id="exchangeSourcePrefix" class="absolute left-3 top-3 text-sm font-extrabold text-blue-700">Rp</span><input id="exchangeSourceAmount" class="field pl-14 text-lg font-extrabold" type="number" min="0.01" step="0.01" required placeholder="0.00" oninput="updateExchangePreview()"></div><p class="mt-1 text-[10px] text-slate-500">Belum termasuk biaya layanan.</p></div>
+                  <div><label for="exchangeDestinationAmount" class="mb-1.5 block text-xs">Nominal yang benar-benar diterima *</label><div class="relative"><span id="exchangeDestinationPrefix" class="absolute left-3 top-3 text-sm font-extrabold text-blue-700">ج.م</span><input id="exchangeDestinationAmount" class="field pl-14 text-lg font-extrabold" type="number" min="0.01" step="0.01" required placeholder="0.00" oninput="updateExchangePreview()"></div><p class="mt-1 text-[10px] text-slate-500">Gunakan nominal pada bukti penukaran.</p></div>
+                </div>
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <div><label for="exchangeFee" class="mb-1.5 block text-xs">Biaya penukaran (opsional)</label><div class="relative"><span id="exchangeFeePrefix" class="absolute left-3 top-3 text-sm font-extrabold text-blue-700">Rp</span><input id="exchangeFee" class="field pl-14" type="number" min="0" step="0.01" value="0" oninput="updateExchangePreview()"></div><p class="mt-1 text-[10px] text-slate-500">Dipotong dari akun sumber, tidak dicatat sebagai belanja konsumsi.</p></div>
+                  <div><label for="exchangeProvider" class="mb-1.5 block text-xs">Nama money changer / layanan</label><input id="exchangeProvider" class="field" maxlength="100" placeholder="Contoh: money changer / layanan transfer"></div>
+                </div>
+                <div class="exchange-rate-preview"><div><p class="text-[10px] font-extrabold uppercase tracking-[.13em] text-blue-700">Kurs efektif transaksi</p><p id="exchangeRatePreview" class="mt-1 text-lg font-black text-slate-900">Isi kedua nominal untuk menghitung kurs</p><p id="exchangeRateExplain" class="mt-1 text-[10px] leading-4 text-slate-500">Kurs dihitung dari jumlah aktual, bukan kurs perkiraan pasar.</p></div><button type="button" class="btn-quiet !shrink-0 !px-3 !py-2 text-xs" onclick="applyReferenceRateToExchange()">Gunakan kurs referensi</button></div>
+                <div class="rounded-2xl border border-blue-100 bg-blue-50/80 p-3"><div class="flex items-center justify-between gap-3"><span class="text-xs font-bold text-blue-900">Total yang keluar dari akun</span><strong id="exchangeTotalDebit" class="text-sm font-black text-blue-950">—</strong></div><p id="exchangeBalanceWarning" class="mt-1 text-[10px] leading-4 text-blue-700">Biaya akan mengurangi saldo akun sumber. Penukaran tidak menambah pemasukan.</p></div>
+                <div><label for="exchangeNote" class="mb-1.5 block text-xs">Catatan tambahan (opsional)</label><textarea id="exchangeNote" class="field min-h-[76px] resize-y" maxlength="500" placeholder="Contoh: uang kiriman orang tua untuk kebutuhan bulan ini"></textarea></div>
+                <div id="exchangeError" class="hidden rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700"></div>
+                <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end"><button type="button" class="btn-quiet" onclick="resetExchangeForm()">Reset form</button><button id="saveExchangeBtn" type="submit" class="btn-primary">Simpan penukaran</button></div>
+              </form>
+            </article>
+
+            <div class="space-y-4">
+              <article class="card wallet-panel p-4 sm:p-5"><p class="tiny-label text-indigo-600">CARA PENCATATAN</p><h3 class="mt-1 text-lg font-extrabold text-slate-900">Alur uangmu</h3><div class="mt-4 space-y-3">
+                <div class="wallet-flow-step"><span class="wallet-flow-number">1</span><div><p class="text-sm font-extrabold text-slate-800">Kiriman orang tua</p><p class="mt-1 text-xs leading-5 text-slate-500">Catat sebagai pemasukan ke akun BSI (IDR).</p></div></div>
+                <div class="wallet-flow-step"><span class="wallet-flow-number">2</span><div><p class="text-sm font-extrabold text-slate-800">Ambil tunai Rupiah (jika perlu)</p><p class="mt-1 text-xs leading-5 text-slate-500">Gunakan Transfer biasa: BSI → Dompet Rupiah. Bukan pengeluaran.</p></div></div>
+                <div class="wallet-flow-step"><span class="wallet-flow-number">3</span><div><p class="text-sm font-extrabold text-slate-800">Tukar ke Pound Mesir</p><p class="mt-1 text-xs leading-5 text-slate-500">Gunakan form penukaran ini. Saldo IDR turun dan saldo EGP naik; pemasukan/pengeluaran konsumsi tidak bertambah.</p></div></div>
+                <div class="wallet-flow-step"><span class="wallet-flow-number">4</span><div><p class="text-sm font-extrabold text-slate-800">Catat kebutuhan harian</p><p class="mt-1 text-xs leading-5 text-slate-500">Makan, transportasi, dan belanja dicatat sebagai pengeluaran dari Dompet Mesir.</p></div></div>
+              </div></article>
+              <article class="card wallet-panel p-4 sm:p-5"><p class="tiny-label text-indigo-600">FX REFERENCE</p><h3 class="mt-1 font-extrabold text-slate-900">Kurs referensi tersimpan</h3><p id="walletReferenceRate" class="mt-2 text-xl font-black text-slate-900">Belum tersedia</p><p id="walletReferenceRateNote" class="mt-1 text-xs leading-5 text-slate-500">Atur kurs di Pengaturan. Kurs referensi hanya membantu estimasi; catat nominal aktual yang diterima.</p><button type="button" class="btn-quiet mt-3 w-full" onclick="showPage('settings')">Kelola kurs referensi →</button></article>
+            </div>
+          </div>
+
+          <article class="card wallet-panel p-4 sm:p-6"><div class="mb-4 flex flex-wrap items-center justify-between gap-3"><div><p class="tiny-label text-blue-600">EXCHANGE LEDGER</p><h3 class="mt-1 text-lg font-extrabold text-slate-900">Riwayat penukaran</h3><p class="mt-1 text-xs leading-5 text-slate-500">Kurs efektif, metode, biaya, dan jumlah aktual yang diterima disimpan pada catatan transfer.</p></div><span class="rounded-xl bg-blue-50 px-3 py-2 text-xs font-extrabold text-blue-800">Bukan pemasukan / belanja</span></div><div id="currencyExchangeHistory" class="space-y-3"><p class="text-sm text-slate-400">Belum ada riwayat penukaran.</p></div></article>
+        </section>
+
         <section id="page-settings" class="page-panel space-y-5">
           <div><p class="tiny-label text-indigo-600">PREFERENSI</p><h2 class="mt-2 text-2xl font-extrabold text-slate-900">Pengaturan</h2><p class="mt-2 text-sm text-slate-500">Kelola saldo awal, kurs mata uang, dan informasi akun.</p></div>
           <div class="grid grid-cols-1 gap-4 xl:grid-cols-2">
@@ -1074,6 +1174,7 @@
     <div class="grid grid-cols-3 gap-2 sm:grid-cols-3">
       <button class="mobile-menu-item" data-page="goals" onclick="showPage('goals')"><span class="menu-icon">◎</span><span>Target</span></button>
       <button class="mobile-menu-item" data-page="budgets" onclick="showPage('budgets')"><span class="menu-icon">▤</span><span>Budget</span></button>
+      <button class="mobile-menu-item" data-page="wallets" onclick="showPage('wallets')"><span class="menu-icon">⇄</span><span>Dompet & Kurs</span></button>
       <button class="mobile-menu-item" onclick="openDashboardProfile()"><span class="menu-icon">◉</span><span>Perkenalan</span></button>
       <button class="mobile-menu-item" data-page="profile-edit" onclick="showPage('profile-edit')"><span class="menu-icon">✎</span><span>Edit profil</span></button>
       <button class="mobile-menu-item" data-page="recurring" onclick="showPage('recurring')"><span class="menu-icon">↻</span><span>Transaksi rutin</span></button>
@@ -1127,7 +1228,7 @@
         <input id="editAccountId" type="hidden">
         <div><label for="editAccountName" class="mb-1.5 block text-xs font-bold text-slate-600">Nama akun</label><input id="editAccountName" class="field" type="text" maxlength="80" required placeholder="Contoh: BCA, Cash EGP, Dompet perjalanan"></div>
         <div id="accountCurrencyWrap"><label for="accountCurrency" class="mb-1.5 block text-xs font-bold text-slate-600">Mata uang</label><select id="accountCurrency" class="field"><option value="EGP">EGP · Pound Mesir</option><option value="IDR">IDR · Rupiah</option></select></div>
-        <div id="accountTypeWrap"><label for="accountType" class="mb-1.5 block text-xs font-bold text-slate-600">Jenis wallet</label><select id="accountType" class="field"><option value="cash">Cash / Saldo tersedia</option><option value="savings">Tabungan</option></select></div>
+        <div id="accountTypeWrap"><label for="accountType" class="mb-1.5 block text-xs font-bold text-slate-600">Jenis wallet</label><select id="accountType" class="field"><option value="cash">Dompet tunai</option><option value="bank">Rekening bank</option><option value="savings">Tabungan</option></select></div>
         <div><label for="editOpeningBalance" class="mb-1.5 block text-xs font-bold text-slate-600">Saldo awal</label><input id="editOpeningBalance" class="field" type="number" step="0.01" required><p id="editOpeningCurrency" class="mt-1 text-[10px] text-slate-400">Saldo awal dalam mata uang akun.</p></div>
         <div id="accountError" class="hidden rounded-xl bg-rose-50 p-3 text-sm text-rose-700"></div>
         <div class="flex justify-end gap-2"><button type="button" onclick="closeModal('accountModal')" class="btn-quiet">Batal</button><button id="saveAccountBtn" type="submit" class="btn-primary">Simpan akun</button></div>
@@ -1154,10 +1255,10 @@
       : null;
 
     const CATEGORY_OPTIONS = {
-      income: ['Gaji / Beasiswa', 'Uang saku', 'Freelance', 'Hadiah', 'Pengembalian dana', 'Lainnya'],
+      income: ['Kiriman orang tua', 'Gaji / Beasiswa', 'Uang saku', 'Freelance', 'Hadiah', 'Pengembalian dana', 'Lainnya'],
       expense: ['Makan', 'Transport', 'Kuliah/Buku', 'Sewa Kontrakan', 'Utilitas', 'Kesehatan', 'Belanja', 'Lainnya'],
       savings: ['Dana darurat', 'Tabungan tujuan', 'Tabungan pendidikan', 'Lainnya'],
-      transfer: ['Transfer', 'Kirim keluarga', 'Pembayaran', 'Lainnya']
+      transfer: ['Transfer', 'Kirim keluarga', 'Pembayaran', 'Penukaran Mata Uang', 'Lainnya']
     };
     const TYPE_LABELS = { income: 'Pemasukan', expense: 'Pengeluaran', savings: 'Tabungan', transfer: 'Transfer' };
     const TYPE_CLASSES = { income: 'type-income', expense: 'type-expense', savings: 'type-savings', transfer: 'type-transfer' };
@@ -1195,6 +1296,8 @@
     let pinGateUserId = null;
     let pinUnlocked = false;
     let pinBusy = false;
+    let walletExchangeSchemaReady = false;
+    let walletExchangeWarningShown = false;
 
     document.addEventListener('DOMContentLoaded', init);
 
@@ -1205,6 +1308,7 @@
       initTheme();
       document.getElementById('transactionDate').value = today;
       document.getElementById('rateDate').value = today;
+      if (document.getElementById('exchangeDate')) document.getElementById('exchangeDate').value = today;
       document.getElementById('budgetMonth').value = today.slice(0, 7);
       document.getElementById('budgetCategory').innerHTML = CATEGORY_OPTIONS.expense.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
       initV4UI(today);
@@ -1581,7 +1685,7 @@
     function renderBalances() {
       ['EGP', 'IDR'].forEach(currency => {
         const currencyAccounts = balances.filter(a => a.currency === currency);
-        const available = currencyAccounts.filter(a => a.account_type === 'cash').reduce((sum, a) => sum + Number(a.balance || 0), 0);
+        const available = currencyAccounts.filter(a => a.account_type === 'cash' || a.account_type === 'bank').reduce((sum, a) => sum + Number(a.balance || 0), 0);
         const savings = currencyAccounts.filter(a => a.account_type === 'savings').reduce((sum, a) => sum + Number(a.balance || 0), 0);
         const assets = available + savings;
         animateMoneyValue(currency === 'EGP' ? 'egpAssets' : 'idrAssets', assets, currency);
@@ -1646,6 +1750,7 @@
       const titles = {
         dashboard: ['PERSONAL FINANCE', 'Dashboard'],
         transactions: ['RIWAYAT & PENCARIAN', 'Transaksi'],
+        wallets: ['WALLET & CURRENCY EXCHANGE', 'Dompet & Penukaran'],
         goals: ['MENABUNG DENGAN TUJUAN', 'Target tabungan'],
         budgets: ['BATAS PENGELUARAN', 'Budget bulanan'],
         settings: ['PREFERENSI', 'Pengaturan'],
@@ -1662,6 +1767,7 @@
       if (page === 'calendar') renderCalendar();
       if (page === 'recurring') renderRecurringRules();
       if (page === 'reports') renderReport();
+      if (page === 'wallets') renderWalletManager();
       const primaryMobilePages = ['dashboard','transactions','calendar'];
       const menuToggle = document.getElementById('mobileMenuToggle');
       if (menuToggle) menuToggle.classList.toggle('active', !primaryMobilePages.includes(page));
@@ -1866,7 +1972,7 @@
       if (!accounts.length) { host.innerHTML = '<p class="text-sm text-slate-400">Akun belum tersedia. Jalankan SQL schema untuk menyiapkan akun awal.</p>'; return; }
       host.innerHTML = accounts.map(a => {
         const b = balances.find(x=>x.id===a.id);
-        return `<div class="flex items-center gap-3 rounded-2xl border border-slate-100 p-3"><div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${a.currency==='EGP'?'bg-emerald-50 text-emerald-700':'bg-indigo-50 text-indigo-700'} font-extrabold">${a.currency==='EGP'?'ج.م':'Rp'}</div><div class="min-w-0 flex-1"><p class="truncate text-sm font-bold text-slate-800">${escapeHtml(a.name)}</p><p class="mt-1 text-[10px] font-semibold uppercase tracking-wide text-slate-400">${a.currency} · ${a.account_type==='cash'?'Saldo tersedia':'Tabungan'}</p><p class="mt-1 text-sm font-extrabold text-slate-900 money-value">${escapeHtml(formatMoney(b ? b.balance : a.opening_balance,a.currency))}</p></div><div class="flex shrink-0 gap-1"><button onclick="editAccount('${a.id}')" class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 hover:border-indigo-200 hover:text-indigo-700">Atur</button><button onclick="deleteAccount('${a.id}')" class="rounded-lg border border-rose-100 px-2 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50" title="Hapus akun">×</button></div></div>`;
+        return `<div class="flex items-center gap-3 rounded-2xl border border-slate-100 p-3"><div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${a.currency==='EGP'?'bg-emerald-50 text-emerald-700':'bg-indigo-50 text-indigo-700'} font-extrabold">${a.currency==='EGP'?'ج.م':'Rp'}</div><div class="min-w-0 flex-1"><p class="truncate text-sm font-bold text-slate-800">${escapeHtml(a.name)}</p><p class="mt-1 text-[10px] font-semibold uppercase tracking-wide text-slate-400">${a.currency} · ${a.account_type==='bank'?'Rekening bank':a.account_type==='savings'?'Tabungan':'Dompet tunai'}</p><p class="mt-1 text-sm font-extrabold text-slate-900 money-value">${escapeHtml(formatMoney(b ? b.balance : a.opening_balance,a.currency))}</p></div><div class="flex shrink-0 gap-1"><button onclick="editAccount('${a.id}')" class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-bold text-slate-600 hover:border-indigo-200 hover:text-indigo-700">Atur</button><button onclick="deleteAccount('${a.id}')" class="rounded-lg border border-rose-100 px-2 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50" title="Hapus akun">×</button></div></div>`;
       }).join('');
     }
 
@@ -2072,6 +2178,7 @@
     function editTransaction(id) {
       const transaction = transactions.find(t=>t.id===id);
       if (!transaction) return showToast('Transaksi tidak ditemukan. Muat ulang data.','error');
+      if (transaction.exchange_rate_applied != null) return showToast('Catatan penukaran tersimpan sebagai transfer dengan kurs dan biaya aktual. Untuk mengoreksi, hapus catatan ini lalu masukkan kembali dari halaman Dompet & Penukaran.', 'info');
       updateCategories(transaction.category);
       openTransactionModal(transaction);
       updateCategories(transaction.category);
@@ -3023,7 +3130,7 @@
       if (!select) return;
       const previous = selected || select.value;
       const options = accounts.filter(a=>a.currency===currency);
-      select.innerHTML = options.map(a=>`<option value="${a.id}">${escapeHtml(a.name)} · ${a.account_type==='cash'?'Saldo tersedia':'Tabungan'}</option>`).join('');
+      select.innerHTML = options.map(a=>`<option value="${a.id}">${escapeHtml(a.name)} · ${a.account_type==='bank'?'Rekening bank':a.account_type==='savings'?'Tabungan':'Dompet tunai'}</option>`).join('');
       if (previous && options.some(a=>a.id===previous)) select.value = previous;
       setText('recurringAccountLabel', type==='income'?'Akun penerima *':'Akun pembayaran *');
     }
@@ -3359,6 +3466,251 @@
   
 
 
+    // ---------------- Farhan Finance V7: wallet manager and audited currency exchange ----------------
+    const EXCHANGE_METHOD_LABELS = {
+      cash_money_changer: 'Tunai di money changer',
+      bank_or_transfer: 'Rekening / transfer',
+      exchange_service: 'Layanan penukaran',
+      other: 'Cara lainnya'
+    };
+
+    function walletTypeLabel(account) {
+      if (!account) return 'Akun';
+      if (account.account_type === 'bank') return 'Rekening bank';
+      if (account.account_type === 'savings') return 'Tabungan';
+      return 'Dompet tunai';
+    }
+
+    function findWalletByName(name, currency) {
+      return accounts.find(a => a.currency === currency && String(a.name || '').toLowerCase() === name.toLowerCase());
+    }
+
+    function defaultWalletFor(currency, method, role='source') {
+      const methodWantsBank = method === 'bank_or_transfer' || method === 'exchange_service';
+      if (role === 'source' && currency === 'IDR') {
+        if (methodWantsBank) return findWalletByName('BSI','IDR') || accounts.find(a=>a.currency==='IDR' && a.account_type==='bank') || findWalletByName('Dompet Rupiah','IDR') || accounts.find(a=>a.currency==='IDR');
+        return findWalletByName('Dompet Rupiah','IDR') || accounts.find(a=>a.currency==='IDR' && a.account_type==='cash') || accounts.find(a=>a.currency==='IDR');
+      }
+      if (role === 'destination' && currency === 'EGP') return findWalletByName('Dompet Mesir','EGP') || accounts.find(a=>a.currency==='EGP' && a.account_type==='cash') || accounts.find(a=>a.currency==='EGP');
+      if (role === 'destination' && currency === 'IDR') {
+        if (methodWantsBank) return findWalletByName('BSI','IDR') || accounts.find(a=>a.currency==='IDR' && a.account_type==='bank') || findWalletByName('Dompet Rupiah','IDR') || accounts.find(a=>a.currency==='IDR');
+        return findWalletByName('Dompet Rupiah','IDR') || accounts.find(a=>a.currency==='IDR' && a.account_type==='cash') || accounts.find(a=>a.currency==='IDR');
+      }
+      if (role === 'source' && currency === 'EGP') return findWalletByName('Dompet Mesir','EGP') || accounts.find(a=>a.currency==='EGP' && a.account_type==='cash') || accounts.find(a=>a.currency==='EGP');
+      return accounts.find(a=>a.currency===currency);
+    }
+
+    function renderWalletManager() {
+      const host = document.getElementById('walletOverview');
+      const sourceSelect = document.getElementById('exchangeSourceAccount');
+      const destinationSelect = document.getElementById('exchangeDestinationAccount');
+      if (!document.getElementById('page-wallets')) return;
+      const bsi = findWalletByName('BSI','IDR') || accounts.find(a=>a.currency==='IDR' && a.account_type==='bank');
+      const idrCash = findWalletByName('Dompet Rupiah','IDR') || accounts.find(a=>a.currency==='IDR' && a.account_type==='cash');
+      const egpCash = findWalletByName('Dompet Mesir','EGP') || accounts.find(a=>a.currency==='EGP' && a.account_type==='cash');
+      const balanceFor = a => a ? Number(balances.find(b=>b.id===a.id)?.balance ?? a.opening_balance ?? 0) : 0;
+      setText('walletHeroBsi', bsi ? formatMoney(balanceFor(bsi),'IDR') : 'Belum dibuat');
+      setText('walletHeroIdrCash', idrCash ? formatMoney(balanceFor(idrCash),'IDR') : 'Belum dibuat');
+      setText('walletHeroEgpCash', egpCash ? formatMoney(balanceFor(egpCash),'EGP') : 'Belum dibuat');
+      setText('walletReferenceRate', latestRate && Number(latestRate.rate)>0 ? `1 EGP = ${formatMoney(latestRate.rate,'IDR')}` : 'Belum tersedia');
+      setText('walletReferenceRateNote', latestRate && Number(latestRate.rate)>0 ? `Tanggal ${formatDate(latestRate.rate_date)}${latestRate.note ? ' · '+latestRate.note : ''}. Kurs referensi tidak menggantikan jumlah aktual yang kamu terima.` : 'Atur kurs di Pengaturan. Kurs referensi hanya membantu estimasi; catat nominal aktual yang diterima.');
+      if (host) {
+        if (!accounts.length) host.innerHTML = '<p class="text-sm text-slate-500">Belum ada akun. Jalankan migrasi V7 lalu muat ulang data.</p>';
+        else host.innerHTML = accounts.map(a => {
+          const balance = balanceFor(a);
+          const icon = a.account_type==='bank' ? '▤' : a.currency==='EGP' ? 'ج.م' : 'Rp';
+          const tone = a.currency==='EGP' ? 'wallet-account-egp' : a.account_type==='bank' ? 'wallet-account-bank' : 'wallet-account-idr';
+          return `<article class="wallet-account-card ${tone}"><div class="flex items-start justify-between gap-3"><div class="wallet-account-icon">${icon}</div><span class="wallet-currency-pill">${escapeHtml(a.currency)}</span></div><p class="mt-4 truncate text-sm font-extrabold text-slate-800">${escapeHtml(a.name)}</p><p class="mt-1 text-[10px] font-bold uppercase tracking-[.12em] text-slate-500">${escapeHtml(walletTypeLabel(a))}</p><p class="mt-3 break-words text-xl font-black text-slate-950 money-value">${escapeHtml(formatMoney(balance,a.currency))}</p><button type="button" onclick="showPage('settings')" class="mt-4 text-xs font-extrabold text-blue-700">Atur akun →</button></article>`;
+        }).join('');
+      }
+      if (sourceSelect && destinationSelect) {
+        const oldSource = sourceSelect.value;
+        const oldDestination = destinationSelect.value;
+        sourceSelect.innerHTML = accounts.map(a=>`<option value="${a.id}">${escapeHtml(a.name)} · ${a.currency} · ${escapeHtml(walletTypeLabel(a))}</option>`).join('');
+        let source = accounts.find(a=>a.id===oldSource);
+        if (!source) source = defaultWalletFor('IDR', document.getElementById('exchangeMethod')?.value || 'cash_money_changer','source');
+        if (source) sourceSelect.value = source.id;
+        const destOptions = accounts.filter(a=>source && a.currency!==source.currency);
+        destinationSelect.innerHTML = destOptions.map(a=>`<option value="${a.id}">${escapeHtml(a.name)} · ${a.currency} · ${escapeHtml(walletTypeLabel(a))}</option>`).join('');
+        let destination = destOptions.find(a=>a.id===oldDestination);
+        if (!destination && source) destination = defaultWalletFor(source.currency==='IDR'?'EGP':'IDR', document.getElementById('exchangeMethod')?.value || 'cash_money_changer','destination');
+        if (destination && destOptions.some(a=>a.id===destination.id)) destinationSelect.value = destination.id;
+        updateExchangePreview();
+      }
+      renderCurrencyExchangeHistory();
+    }
+
+    function onExchangeMethodChange() {
+      const method = document.getElementById('exchangeMethod')?.value || 'cash_money_changer';
+      const sourceSelect = document.getElementById('exchangeSourceAccount');
+      if (!sourceSelect) return;
+      const currentSource = accountById(sourceSelect.value);
+      if (!currentSource || currentSource.currency==='IDR') {
+        const preferred = defaultWalletFor('IDR',method,'source');
+        if (preferred) sourceSelect.value = preferred.id;
+      }
+      updateExchangeAccountOptions('source');
+    }
+
+    function updateExchangeAccountOptions(changed) {
+      const sourceSelect = document.getElementById('exchangeSourceAccount');
+      const destinationSelect = document.getElementById('exchangeDestinationAccount');
+      if (!sourceSelect || !destinationSelect) return;
+      const oldSource = sourceSelect.value;
+      const oldDestination = destinationSelect.value;
+      const source = accountById(oldSource) || defaultWalletFor('IDR',document.getElementById('exchangeMethod')?.value || 'cash_money_changer','source');
+      sourceSelect.innerHTML = accounts.map(a=>`<option value="${a.id}">${escapeHtml(a.name)} · ${a.currency} · ${escapeHtml(walletTypeLabel(a))}</option>`).join('');
+      if (source) sourceSelect.value = source.id;
+      const currentSource = accountById(sourceSelect.value);
+      const options = accounts.filter(a=>currentSource && a.currency!==currentSource.currency);
+      destinationSelect.innerHTML = options.map(a=>`<option value="${a.id}">${escapeHtml(a.name)} · ${a.currency} · ${escapeHtml(walletTypeLabel(a))}</option>`).join('');
+      let destination = options.find(a=>a.id===oldDestination);
+      if (!destination && currentSource) destination = defaultWalletFor(currentSource.currency==='IDR'?'EGP':'IDR',document.getElementById('exchangeMethod')?.value || 'cash_money_changer','destination');
+      if (destination && options.some(a=>a.id===destination.id)) destinationSelect.value = destination.id;
+      updateExchangePreview();
+    }
+
+    function updateExchangePreview() {
+      const source = accountById(document.getElementById('exchangeSourceAccount')?.value);
+      const destination = accountById(document.getElementById('exchangeDestinationAccount')?.value);
+      const sourceAmount = Number(document.getElementById('exchangeSourceAmount')?.value || 0);
+      const destinationAmount = Number(document.getElementById('exchangeDestinationAmount')?.value || 0);
+      const fee = Number(document.getElementById('exchangeFee')?.value || 0);
+      const srcCurrency = source?.currency || 'IDR';
+      const dstCurrency = destination?.currency || 'EGP';
+      setText('exchangeDirectionFrom',srcCurrency);
+      setText('exchangeDirectionTo',dstCurrency);
+      setText('exchangeSourcePrefix',srcCurrency==='EGP'?'ج.م':'Rp');
+      setText('exchangeDestinationPrefix',dstCurrency==='EGP'?'ج.م':'Rp');
+      setText('exchangeFeePrefix',srcCurrency==='EGP'?'ج.م':'Rp');
+      setText('exchangeSourceHint',source ? `Saldo tercatat: ${formatMoney(Number(balances.find(b=>b.id===source.id)?.balance ?? source.opening_balance ?? 0),srcCurrency)}.` : 'Pilih akun sumber.');
+      setText('exchangeDestinationHint',destination ? `Saldo saat ini: ${formatMoney(Number(balances.find(b=>b.id===destination.id)?.balance ?? destination.opening_balance ?? 0),dstCurrency)}.` : 'Pilih akun tujuan dengan mata uang berbeda.');
+      setText('exchangeTotalDebit',source && sourceAmount>0 ? formatMoney(sourceAmount+Math.max(0,fee),srcCurrency) : '—');
+      const rate = source && destination && source.currency!==destination.currency && sourceAmount>0 && destinationAmount>0
+        ? (source.currency==='IDR' ? sourceAmount/destinationAmount : destinationAmount/sourceAmount) : 0;
+      setText('exchangeRatePreview',rate>0 ? `1 EGP ≈ ${formatMoney(rate,'IDR')}` : 'Isi kedua nominal untuk menghitung kurs');
+      setText('exchangeRateExplain',rate>0 ? `Kurs efektif dari jumlah aktual. Biaya ${formatMoney(Math.max(0,fee),srcCurrency)} dicatat terpisah dan ikut mengurangi saldo sumber.` : 'Untuk IDR → EGP, kurs = IDR yang ditukar ÷ EGP diterima. Biaya tidak dimasukkan ke kurs efektif.');
+      const balance = source ? Number(balances.find(b=>b.id===source.id)?.balance ?? source.opening_balance ?? 0) : 0;
+      const warning = document.getElementById('exchangeBalanceWarning');
+      if (warning) {
+        if (source && sourceAmount+Math.max(0,fee)>balance+0.005) {
+          warning.textContent = `Perhatian: saldo tercatat ${formatMoney(balance,srcCurrency)} lebih kecil daripada total keluar ${formatMoney(sourceAmount+Math.max(0,fee),srcCurrency)}. Kamu bisa lanjut jika saldo awal belum lengkap.`;
+          warning.className = 'mt-1 text-[10px] leading-4 text-amber-700';
+        } else {
+          warning.textContent = 'Biaya akan mengurangi saldo akun sumber. Penukaran tidak menambah pemasukan.';
+          warning.className = 'mt-1 text-[10px] leading-4 text-blue-700';
+        }
+      }
+    }
+
+    function applyReferenceRateToExchange() {
+      if (!latestRate || !(Number(latestRate.rate)>0)) return showToast('Belum ada kurs referensi. Simpan atau perbarui kurs di Pengaturan terlebih dahulu.','error');
+      const source = accountById(document.getElementById('exchangeSourceAccount').value);
+      const destination = accountById(document.getElementById('exchangeDestinationAccount').value);
+      const sourceAmount = Number(document.getElementById('exchangeSourceAmount').value || 0);
+      if (!source || !destination || source.currency===destination.currency || !(sourceAmount>0)) return showToast('Pilih akun berbeda mata uang dan isi nominal yang ditukar terlebih dahulu.','info');
+      const rate = Number(latestRate.rate);
+      const estimate = source.currency==='IDR' ? sourceAmount/rate : sourceAmount*rate;
+      document.getElementById('exchangeDestinationAmount').value = destination.currency==='IDR' ? estimate.toFixed(2) : estimate.toFixed(2);
+      updateExchangePreview();
+      showToast('Estimasi kurs referensi dimasukkan. Koreksi sesuai jumlah aktual pada bukti penukaran.','info');
+    }
+
+    function resetExchangeForm() {
+      const form = document.getElementById('currencyExchangeForm');
+      if (form) form.reset();
+      const date = document.getElementById('exchangeDate');
+      if (date) date.value = localDateString(new Date());
+      const fee = document.getElementById('exchangeFee');
+      if (fee) fee.value = '0';
+      const error = document.getElementById('exchangeError');
+      if (error) error.classList.add('hidden');
+      const method = document.getElementById('exchangeMethod')?.value || 'cash_money_changer';
+      const preferredSource = defaultWalletFor('IDR', method, 'source');
+      const sourceSelect = document.getElementById('exchangeSourceAccount');
+      if (sourceSelect && preferredSource) sourceSelect.value = preferredSource.id;
+      updateExchangeAccountOptions('source');
+      updateExchangePreview();
+    }
+
+    async function submitCurrencyExchange(event) {
+      event.preventDefault();
+      if (!sb || !currentUser || isSaving) return;
+      const source = accountById(document.getElementById('exchangeSourceAccount').value);
+      const destination = accountById(document.getElementById('exchangeDestinationAccount').value);
+      const amount = Number(document.getElementById('exchangeSourceAmount').value);
+      const destinationAmount = Number(document.getElementById('exchangeDestinationAmount').value);
+      const fee = Number(document.getElementById('exchangeFee').value || 0);
+      const date = document.getElementById('exchangeDate').value;
+      const method = document.getElementById('exchangeMethod').value;
+      const provider = document.getElementById('exchangeProvider').value.trim();
+      const note = document.getElementById('exchangeNote').value.trim();
+      const errorBox = document.getElementById('exchangeError');
+      const fail = message => { errorBox.textContent = message; errorBox.classList.remove('hidden'); };
+      errorBox.classList.add('hidden');
+      if (!source || !destination) return fail('Pilih akun sumber dan akun tujuan. Jalankan migrasi V7 jika akun BSI atau dompet belum tersedia.');
+      if (source.id===destination.id || source.currency===destination.currency) return fail('Penukaran harus memindahkan dana antar-akun dengan mata uang berbeda.');
+      if (!(amount>0) || !(destinationAmount>0) || !Number.isFinite(amount) || !Number.isFinite(destinationAmount)) return fail('Isi nominal yang ditukar dan jumlah yang benar-benar diterima.');
+      if (!Number.isFinite(fee) || fee<0 || !date) return fail('Periksa tanggal dan biaya penukaran.');
+      const rateIdrPerEgp = source.currency==='IDR' ? amount/destinationAmount : destinationAmount/amount;
+      if (!(rateIdrPerEgp>0) || !Number.isFinite(rateIdrPerEgp)) return fail('Kurs efektif tidak valid. Periksa kembali kedua nominal.');
+      const sourceBalance = Number(balances.find(b=>b.id===source.id)?.balance ?? source.opening_balance ?? 0);
+      if (sourceBalance+0.005 < amount+fee) {
+        const proceed = confirm(`Saldo tercatat ${formatMoney(sourceBalance,source.currency)}, sedangkan total keluar ${formatMoney(amount+fee,source.currency)}.\n\nJika saldo awal belum dimasukkan dengan benar, kamu boleh lanjut. Simpan penukaran ini?`);
+        if (!proceed) return;
+      }
+      const methodLabel = EXCHANGE_METHOD_LABELS[method] || EXCHANGE_METHOD_LABELS.other;
+      const noteParts = [`Metode: ${methodLabel}`, provider ? `Penyedia: ${provider}` : '', note].filter(Boolean);
+      const payload = {
+        user_id: currentUser.id,
+        type: 'transfer',
+        category: 'Penukaran Mata Uang',
+        amount,
+        currency: source.currency,
+        transaction_date: date,
+        note: noteParts.join(' · ').slice(0,500),
+        source_account_id: source.id,
+        destination_account_id: destination.id,
+        destination_amount: destinationAmount,
+        exchange_method: method,
+        exchange_provider: provider || null,
+        exchange_rate_applied: Number(rateIdrPerEgp.toFixed(8)),
+        exchange_fee: Number(fee.toFixed(2))
+      };
+      const button = document.getElementById('saveExchangeBtn');
+      setSaving(true,'saveExchangeBtn','Menyimpan penukaran...');
+      try {
+        const { error } = await sb.from('transactions').insert(payload).select('id').single();
+        if (error) throw error;
+        showToast(`Penukaran tersimpan sebagai transfer: ${source.currency} → ${destination.currency}.`, 'success');
+        resetExchangeForm();
+        await loadData(false);
+        showPage('wallets');
+      } catch (err) {
+        fail(friendlyError(err));
+        showToast('Penukaran belum tersimpan. Periksa migrasi SQL V7 dan coba lagi.', 'error');
+      } finally {
+        setSaving(false,'saveExchangeBtn','Simpan penukaran');
+      }
+    }
+
+    function renderCurrencyExchangeHistory() {
+      const host = document.getElementById('currencyExchangeHistory');
+      if (!host) return;
+      const rows = transactions.filter(t=>t.type==='transfer' && t.exchange_rate_applied != null)
+        .sort((a,b)=>String(b.transaction_date||'').localeCompare(String(a.transaction_date||'')) || String(b.created_at||'').localeCompare(String(a.created_at||''))).slice(0,30);
+      if (!rows.length) { host.innerHTML = '<div class="wallet-empty-state"><span>⇄</span><p class="mt-2 font-extrabold text-slate-700">Belum ada penukaran tercatat</p><p class="mt-1 text-xs text-slate-500">Setelah kamu menukar Rupiah ke Pound Mesir, riwayat akan tampil di sini.</p></div>'; return; }
+      host.innerHTML = rows.map(t=>{
+        const source = accountById(t.source_account_id); const destination = accountById(t.destination_account_id);
+        const rate = Number(t.exchange_rate_applied||0); const fee = Number(t.exchange_fee||0);
+        const direction = `${source?.currency || t.currency} → ${destination?.currency || '—'}`;
+        const sourceAmount = Number(t.amount||0); const destinationAmount = Number(t.destination_amount||0);
+        const method = EXCHANGE_METHOD_LABELS[t.exchange_method] || 'Penukaran mata uang';
+        return `<div class="wallet-exchange-row"><div class="flex min-w-0 flex-1 items-start gap-3"><div class="wallet-exchange-icon">⇄</div><div class="min-w-0 flex-1"><div class="flex flex-wrap items-center gap-2"><p class="text-sm font-extrabold text-slate-900">${escapeHtml(direction)}</p><span class="wallet-currency-pill">${escapeHtml(method)}</span></div><p class="mt-1 truncate text-xs text-slate-500">${escapeHtml(source?.name||'Akun sumber')} → ${escapeHtml(destination?.name||'Akun tujuan')}${t.exchange_provider?' · '+escapeHtml(t.exchange_provider):''}</p><p class="mt-1 text-[10px] text-slate-400">${formatDate(t.transaction_date)} · Kurs efektif: 1 EGP ≈ ${escapeHtml(formatMoney(rate,'IDR'))}</p>${t.note?`<p class="mt-1 break-words text-[10px] leading-4 text-slate-500">${escapeHtml(t.note)}</p>`:''}</div></div><div class="shrink-0 text-right"><p class="text-xs font-extrabold text-slate-700">− ${escapeHtml(formatMoney(sourceAmount,source?.currency||t.currency))}</p><p class="mt-1 text-xs font-black text-emerald-700">+ ${escapeHtml(formatMoney(destinationAmount,destination?.currency||'EGP'))}</p>${fee>0?`<p class="mt-1 text-[10px] font-bold text-amber-700">Biaya ${escapeHtml(formatMoney(fee,source?.currency||t.currency))}</p>`:''}<button type="button" class="mt-2 text-[10px] font-bold text-rose-600" onclick="deleteTransaction('${t.id}')">Hapus catatan</button></div></div>`;
+      }).join('');
+    }
+
+
     // ---------------- Farhan Finance V6.1: quick actions, themes, notifications, attachments, categories, FX, exports ----------------
     async function loadV7Data() {
       customCategories = [];
@@ -3402,6 +3754,7 @@
     function openRepeatTransaction(transactionId) {
       const transaction = transactions.find(t=>t.id===transactionId);
       if (!transaction) return showToast('Transaksi asal tidak ditemukan. Muat ulang data lalu coba lagi.','error');
+      if (transaction.exchange_rate_applied != null) return showToast('Untuk mencatat penukaran baru, gunakan halaman Dompet & Penukaran agar kurs dan biaya ikut tercatat.', 'info');
       openTransactionModal(transaction, true);
       // A repeat is a new transaction: keep category/note/account selections but use today's date and a blank ID.
       document.getElementById('transactionId').value = '';

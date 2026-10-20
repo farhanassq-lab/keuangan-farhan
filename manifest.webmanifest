@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Farhan Finance — PIN-first & CV Dashboard V6.3",
+  "name": "Farhan Finance — Wallet & Currency Exchange V7",
   "short_name": "Farhan Finance",
-  "description": "Farhan Finance V6.3: login harian PIN, profil CV di awal dashboard, editor terpisah, dan tampilan mobile yang diperbaiki.",
+  "description": "Farhan Finance V7: dompet BSI, Dompet Rupiah, Dompet Mesir, dan pencatatan penukaran IDR–EGP yang akurat.",
   "lang": "id-ID",
   "start_url": "./index.html",
   "scope": "./",

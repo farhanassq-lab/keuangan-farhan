@@ -1,4 +1,4 @@
-const CACHE_NAME = 'farhan-finance-shell-v6-3';
+const CACHE_NAME = 'farhan-finance-shell-v7-wallet-exchange';
 const APP_SHELL = [
   './',
   './index.html',
