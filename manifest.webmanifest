@@ -2,7 +2,7 @@
   "id": "./",
   "name": "Farhan Finance — Keuangan & Tabungan",
   "short_name": "Farhan Finance",
-  "description": "Farhan Finance V5: desain biru premium, navigasi mobile tetap, kalender, transaksi berulang, laporan, perencana tabungan, dan dukungan EGP serta IDR.",
+  "description": "Farhan Finance V6: redesign premium biru dengan hero header baru, profile card cerah, form modern, dan navigasi mobile khusus HP.",
   "lang": "id-ID",
   "start_url": "./index.html",
   "scope": "./",
