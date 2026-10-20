@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Farhan Finance — Keuangan & Tabungan",
+  "name": "Farhan Finance — Personal Finance V6.1",
   "short_name": "Farhan Finance",
-  "description": "Farhan Finance V6: profil bergaya CV, hero header biru, form modern, notifikasi yang jelas, dan navigasi mobile khusus HP.",
+  "description": "Farhan Finance V6.1: quick add, repeat transaction, dark mode, reminders, multi-account, receipt attachments, custom categories, CSV/PDF reports, and automatic EGP-IDR rate sync.",
   "lang": "id-ID",
   "start_url": "./index.html",
   "scope": "./",
