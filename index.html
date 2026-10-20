@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#10152F">
-  <meta name="description" content="Farhan Finance V4 — kalender keuangan, transaksi berulang, laporan bulanan, backup aman, dan dukungan EGP serta IDR.">
+  <meta name="description" content="Farhan Finance V5 — desain premium biru, navigasi mobile tetap, perencana tabungan, kalender, laporan, dan dukungan EGP serta IDR.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <title>Farhan Finance — Personal Finance V4</title>
+  <title>Farhan Finance — Personal Finance V5</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -88,7 +88,7 @@
     :root { --ff-navy:#10152f; --ff-indigo:#6557f5; --ff-violet:#8b5cf6; --ff-mint:#5eead4; --ff-line:rgba(148,163,184,.2); }
     body { background:radial-gradient(ellipse at 10% 0%,rgba(129,140,248,.11),transparent 30%),radial-gradient(ellipse at 95% 25%,rgba(45,212,191,.08),transparent 28%),linear-gradient(180deg,#f8faff 0%,#f2f5fb 100%); }
     body::before { content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.22; background-image:radial-gradient(rgba(99,102,241,.23) .65px,transparent .65px); background-size:22px 22px; mask-image:linear-gradient(to bottom,black,transparent 80%); }
-    #authScreen,#appShell,#mobileNav,#toastHost { position:relative; z-index:1; }
+    #authScreen,#appShell,#toastHost { position:relative; z-index:1; }
     .glass-dark { background:radial-gradient(circle at 12% 8%,rgba(94,234,212,.16),transparent 27%),radial-gradient(circle at 88% 20%,rgba(139,92,246,.4),transparent 34%),linear-gradient(135deg,#0b1026 0%,#141b43 50%,#312e81 100%); }
     .card { border:1px solid rgba(226,232,240,.92); border-radius:24px; box-shadow:0 14px 38px rgba(25,35,80,.045),0 2px 7px rgba(25,35,80,.025); transition:transform .24s ease,border-color .24s ease,box-shadow .24s ease; }
     .card:hover { border-color:rgba(165,180,252,.62); box-shadow:0 18px 42px rgba(38,46,105,.075),0 4px 10px rgba(25,35,80,.035); }
@@ -167,7 +167,69 @@
     #mobileNav .mobile-nav-link { flex:0 0 66px; }
     @media(max-width:640px) { .calendar-cell { min-height:65px;padding:6px 2px;border-radius:10px; } .calendar-day-amount { font-size:8px!important; } .calendar-cell .calendar-count { font-size:8px!important; } }
 
-  </style>
+  
+
+    /* Farhan Finance V5 — blue premium cards, sleek sidebar, fixed mobile dock and tactile motion */
+    :root { --v5-blue:#2563eb; --v5-indigo:#4f46e5; --v5-ink:#0b1534; --v5-sky:#38bdf8; }
+    #appShell > aside.glass-dark {
+      width:270px; padding:24px 17px;
+      background:radial-gradient(circle at 92% 0%,rgba(56,189,248,.19),transparent 25%),radial-gradient(circle at 0% 58%,rgba(99,102,241,.20),transparent 32%),linear-gradient(180deg,#07142f 0%,#101d46 52%,#14265b 100%);
+      border-right:1px solid rgba(147,197,253,.2); box-shadow:18px 0 55px rgba(15,23,42,.13);
+    }
+    #appShell > aside.glass-dark > div:first-child > div:first-child { background:linear-gradient(145deg,rgba(96,165,250,.26),rgba(99,102,241,.2)); border-color:rgba(191,219,254,.25); box-shadow:0 10px 28px rgba(37,99,235,.22); }
+    #appShell > aside.glass-dark nav { max-height:calc(100dvh - 255px); overflow-y:auto; padding:0 3px 0 0; scrollbar-width:thin; scrollbar-color:rgba(147,197,253,.24) transparent; }
+    #appShell > aside.glass-dark .nav-link { border:1px solid transparent; border-radius:14px; padding:11px 12px; color:#b7c6e7; transition:transform .2s ease,background .2s ease,border-color .2s ease,color .2s ease,box-shadow .2s ease; }
+    #appShell > aside.glass-dark .nav-link > span:first-child { display:inline-flex; align-items:center; justify-content:center; width:27px; height:27px; border-radius:9px; background:rgba(255,255,255,.055); color:#b7d5ff; font-size:17px; }
+    #appShell > aside.glass-dark .nav-link:hover { transform:translateX(3px); color:#fff; background:rgba(96,165,250,.11); border-color:rgba(147,197,253,.12); }
+    #appShell > aside.glass-dark .nav-link.active { color:#fff; background:linear-gradient(100deg,rgba(59,130,246,.28),rgba(99,102,241,.15)); border-color:rgba(147,197,253,.18); box-shadow:inset 3px 0 0 #67e8f9,0 8px 20px rgba(2,6,23,.12); }
+    #appShell > aside.glass-dark .nav-link.active > span:first-child { color:#fff; background:rgba(96,165,250,.2); }
+    .card { background:linear-gradient(145deg,rgba(255,255,255,.99),rgba(242,247,255,.98)); border-color:rgba(191,219,254,.7); box-shadow:0 17px 42px rgba(30,64,175,.055),0 2px 7px rgba(15,23,42,.025); }
+    .card:hover { border-color:rgba(96,165,250,.62); box-shadow:0 22px 48px rgba(30,64,175,.085),0 4px 10px rgba(15,23,42,.03); }
+    .v5-balance-card { position:relative; overflow:hidden; color:#f8fafc!important; border-color:rgba(147,197,253,.28)!important; box-shadow:0 22px 50px rgba(30,64,175,.18),inset 0 1px 0 rgba(255,255,255,.08)!important; }
+    .v5-balance-egp { background:radial-gradient(circle at 90% 5%,rgba(96,165,250,.32),transparent 31%),linear-gradient(135deg,#0b1534 0%,#173b83 60%,#2748a8 100%)!important; }
+    .v5-balance-idr { background:radial-gradient(circle at 88% 5%,rgba(34,211,238,.27),transparent 30%),linear-gradient(135deg,#082f49 0%,#075985 54%,#1d4ed8 100%)!important; }
+    .v5-balance-card > .absolute { background:rgba(255,255,255,.055)!important; }
+    .v5-balance-card .text-slate-500,.v5-balance-card .text-slate-400 { color:rgba(226,232,240,.76)!important; }
+    .v5-balance-card .text-slate-900,.v5-balance-card .text-slate-800 { color:#f8fafc!important; }
+    .v5-balance-card .border-slate-100 { border-color:rgba(255,255,255,.15)!important; }
+    .v5-balance-card .text-indigo-700 { color:#c7d2fe!important; }
+    .v5-balance-card .bg-emerald-50 { background:rgba(52,211,153,.16)!important; }
+    .v5-balance-card .bg-indigo-50 { background:rgba(165,180,252,.16)!important; }
+    .v5-balance-card .text-emerald-700,.v5-balance-card .text-indigo-700 { color:#dbeafe!important; }
+    .v5-planner-card { position:relative; overflow:hidden; background:radial-gradient(circle at 100% 0%,rgba(96,165,250,.13),transparent 27%),linear-gradient(145deg,#fff 0%,#f2f7ff 100%); }
+    .v5-planner-card::after { content:""; position:absolute; right:-55px; bottom:-75px; width:180px; height:180px; border-radius:50%; border:1px solid rgba(96,165,250,.13); box-shadow:0 0 0 22px rgba(96,165,250,.035),0 0 0 44px rgba(99,102,241,.025); pointer-events:none; }
+    .v5-planner-badge { display:inline-flex; align-items:center; gap:6px; width:max-content; border:1px solid #bfdbfe; border-radius:999px; padding:7px 11px; background:linear-gradient(135deg,#eff6ff,#eef2ff); color:#1d4ed8; font-size:11px; font-weight:800; }
+    .v5-planner-result-icon { display:inline-flex; flex:none; align-items:center; justify-content:center; width:34px; height:34px; border-radius:12px; background:linear-gradient(145deg,#2563eb,#4f46e5); color:#fff; font-weight:900; box-shadow:0 7px 15px rgba(37,99,235,.22); }
+    #mobileNav { position:fixed!important; z-index:70!important; display:block; border-top-color:rgba(191,219,254,.82); background:rgba(255,255,255,.88); box-shadow:0 -14px 38px rgba(15,23,42,.09); padding-left:10px; padding-right:10px; }
+    #mobileNav.hidden { display:none!important; }
+    .mobile-dock { min-height:66px; }
+    .mobile-dock .mobile-nav-link { flex:initial!important; width:100%; min-width:0; min-height:53px; justify-content:center; gap:3px; padding:5px 2px 4px; border-radius:16px; color:#64748b; transition:transform .18s ease,color .18s ease,background .18s ease,box-shadow .18s ease; }
+    .mobile-dock .mobile-nav-link > span:last-child { font-size:10px; line-height:1.1; }
+    .dock-icon { display:flex; align-items:center; justify-content:center; width:29px; height:27px; border-radius:10px; font-size:20px; line-height:1; transition:transform .2s ease,background .2s ease,color .2s ease; }
+    .mobile-dock .mobile-nav-link.active { color:#1d4ed8; background:linear-gradient(145deg,#eff6ff,#e0eaff); box-shadow:inset 0 0 0 1px rgba(147,197,253,.36); }
+    .mobile-dock .mobile-nav-link.active .dock-icon { color:#fff; background:linear-gradient(145deg,#3b82f6,#4f46e5); box-shadow:0 5px 12px rgba(37,99,235,.24); transform:translateY(-1px); }
+    .mobile-add-button { position:relative; display:flex; align-items:center; justify-content:center; justify-self:center; width:53px; height:53px; margin-top:-17px; border:4px solid #f8faff; border-radius:19px; background:linear-gradient(145deg,#2563eb,#4f46e5 68%,#6366f1); color:#fff; font-size:30px; font-weight:400; line-height:1; box-shadow:0 10px 24px rgba(37,99,235,.34),inset 0 1px 0 rgba(255,255,255,.22); transition:transform .18s ease,box-shadow .18s ease; }
+    .mobile-add-button:active { transform:translateY(2px) scale(.91); box-shadow:0 4px 12px rgba(37,99,235,.24); }
+    .mobile-menu-sheet { animation:v5-sheet-in .25s cubic-bezier(.2,.75,.2,1) both; box-shadow:0 24px 70px rgba(15,23,42,.24); }
+    .mobile-menu-item { display:flex; min-height:84px; flex-direction:column; align-items:center; justify-content:center; gap:8px; border:1px solid #e2eaff; border-radius:17px; background:linear-gradient(145deg,#fff,#f4f8ff); color:#334155; font-size:11px; font-weight:800; text-align:center; transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease; }
+    .mobile-menu-item .menu-icon { display:flex; align-items:center; justify-content:center; width:35px; height:35px; border-radius:12px; background:linear-gradient(145deg,#dbeafe,#e0e7ff); color:#1d4ed8; font-size:21px; }
+    .mobile-menu-item.active { border-color:#93c5fd; background:linear-gradient(145deg,#eff6ff,#eef2ff); color:#1d4ed8; box-shadow:inset 0 0 0 1px rgba(96,165,250,.18); }
+    .mobile-menu-item:active { transform:scale(.96); }
+    .mobile-nav-link.active { color:#1d4ed8; background:linear-gradient(145deg,#eff6ff,#e0eaff); }
+    .v5-ripple-host { position:relative; overflow:hidden; isolation:isolate; }
+    .v5-touch-ripple { position:absolute; z-index:0; display:block; border-radius:9999px; pointer-events:none; background:rgba(96,165,250,.28); transform:scale(0); animation:v5-ripple .56s ease-out forwards; }
+    #appShell > aside.glass-dark .v5-touch-ripple { background:rgba(191,219,254,.18); }
+    .v5-ripple-host > *:not(.v5-touch-ripple) { position:relative; z-index:1; }
+    .card:active { transform:scale(.996); }
+    .quick-action:active,.btn-primary:active,.btn-quiet:active,.header-action:active { transform:scale(.975); }
+    @keyframes v5-ripple { to { transform:scale(1); opacity:0; } }
+    @keyframes v5-sheet-in { from { opacity:0; transform:translateY(14px) scale(.985); } to { opacity:1; transform:translateY(0) scale(1); } }
+    @media(max-width:1023px) { .main-content { padding-bottom:calc(112px + env(safe-area-inset-bottom))!important; } }
+    @media(max-width:380px) { .mobile-dock .mobile-nav-link > span:last-child { font-size:9px; } .mobile-add-button { width:49px;height:49px;border-radius:17px; } .mobile-menu-item { min-height:76px; } }
+    @media(hover:none) { .card:active { transform:scale(.99); } .mobile-dock .mobile-nav-link:active { transform:scale(.94); } .mobile-menu-item:active { transform:scale(.96); } }
+    @media(prefers-reduced-motion:reduce) { .v5-touch-ripple,.mobile-menu-sheet { animation:none!important; } .card,.mobile-nav-link,.mobile-add-button,.mobile-menu-item { transition:none!important; } }
+
+</style>
 </head>
 <body class="min-h-screen antialiased">
   <div id="toastHost" class="fixed right-3 top-3 z-[200] flex w-[calc(100%-1.5rem)] max-w-sm flex-col gap-2" aria-live="polite"></div>
@@ -378,6 +440,19 @@
             </article>
           </div>
 
+          <article class="card v5-planner-card feature-card p-5 sm:p-6">
+            <div class="mb-5 flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
+              <div><p class="tiny-label text-blue-600">V5 · SMART SAVINGS</p><h3 class="mt-1 text-lg font-extrabold text-slate-900">Perencana tabungan</h3><p class="mt-1 max-w-xl text-xs leading-5 text-slate-500">Simulasikan setoran bulanan dan perkiraan waktu mencapai target. Simulasi ini tidak mengubah saldo atau membuat transaksi.</p></div>
+              <span class="v5-planner-badge">✦ Planner</span>
+            </div>
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-[1fr_1fr_auto] md:items-end">
+              <div><label for="v5PlannerGoal" class="mb-1.5 block text-xs font-bold text-slate-600">Pilih target</label><select id="v5PlannerGoal" class="field" onchange="calculateV5Planner()"><option value="">Pilih target tabungan</option></select></div>
+              <div><label for="v5PlannerMonthly" class="mb-1.5 block text-xs font-bold text-slate-600">Rencana setoran per bulan</label><input id="v5PlannerMonthly" class="field font-bold" type="number" min="0.01" step="0.01" placeholder="Contoh: 500" oninput="calculateV5Planner()"></div>
+              <button type="button" class="btn-primary !py-3" onclick="calculateV5Planner()">Hitung rencana <span aria-hidden="true">↗</span></button>
+            </div>
+            <div id="v5PlannerResult" class="mt-4 rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 text-sm leading-6 text-slate-600" aria-live="polite">Pilih target dan masukkan rencana setoran bulanan untuk melihat perkiraan waktu pencapaian.</div>
+          </article>
+
           <article class="card p-5 sm:p-6">
             <div class="mb-4 flex items-center justify-between gap-3"><div><h3 class="font-extrabold text-slate-900">Transaksi terbaru</h3><p class="mt-1 text-xs text-slate-500">Aktivitas keuangan terakhir</p></div><button onclick="showPage('transactions')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">Lihat semua →</button></div>
             <div id="recentTransactions" class="divide-y divide-slate-100"><div class="py-8 text-center text-sm text-slate-400">Memuat transaksi...</div></div>
@@ -387,7 +462,7 @@
         <section id="page-calendar" class="page-panel space-y-5">
           <div class="v4-feature-banner relative overflow-hidden rounded-3xl p-5 text-white shadow-lg sm:p-7">
             <div class="absolute -right-8 -top-10 h-40 w-40 rounded-full border border-white/10"></div><div class="absolute right-20 top-20 h-20 w-20 rounded-full bg-cyan-300/10 blur-2xl"></div>
-            <div class="relative flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p class="tiny-label text-cyan-200">V4 · MONEY TIMELINE</p><h2 class="mt-2 text-2xl font-extrabold sm:text-3xl">Kalender keuangan</h2><p class="mt-2 max-w-xl text-sm leading-6 text-indigo-100/80">Lihat kapan uang masuk dan keluar. Pilih tanggal untuk memeriksa aktivitas secara rinci.</p></div><button class="rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-bold transition hover:bg-white/15" onclick="openTransactionModal()">＋ Catat transaksi</button></div>
+            <div class="relative flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p class="tiny-label text-cyan-200">V5 · MONEY TIMELINE</p><h2 class="mt-2 text-2xl font-extrabold sm:text-3xl">Kalender keuangan</h2><p class="mt-2 max-w-xl text-sm leading-6 text-indigo-100/80">Lihat kapan uang masuk dan keluar. Pilih tanggal untuk memeriksa aktivitas secara rinci.</p></div><button class="rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-bold transition hover:bg-white/15" onclick="openTransactionModal()">＋ Catat transaksi</button></div>
           </div>
           <article class="card p-4 sm:p-6">
             <div class="mb-5 flex flex-wrap items-center justify-between gap-3"><div><p class="tiny-label text-indigo-600">PILIH PERIODE</p><h3 class="mt-1 text-lg font-extrabold text-slate-900">Aktivitas per tanggal</h3></div><div class="flex items-center gap-2"><button class="btn-quiet !px-3 !py-2" aria-label="Bulan sebelumnya" onclick="shiftCalendarMonth(-1)">←</button><input id="calendarMonth" class="field !w-auto !py-2 text-sm font-bold" type="month" onchange="renderCalendar()"><button class="btn-quiet !px-3 !py-2" aria-label="Bulan berikutnya" onclick="shiftCalendarMonth(1)">→</button></div></div>
@@ -523,18 +598,30 @@
     </div>
   </div>
 
-  <!-- Mobile bottom nav -->
-  <nav id="mobileNav" class="fixed inset-x-0 bottom-0 z-40 hidden border-t border-slate-200 bg-white/95 px-3 pb-[max(.5rem,env(safe-area-inset-bottom))] pt-2 backdrop-blur-xl lg:hidden">
-    <div class="mx-auto flex max-w-2xl gap-1 overflow-x-auto hide-scrollbar">
-      <button class="mobile-nav-link active" data-page="dashboard" onclick="showPage('dashboard')"><span class="text-lg">◫</span>Home</button>
-      <button class="mobile-nav-link" data-page="transactions" onclick="showPage('transactions')"><span class="text-lg">⇄</span>Transaksi</button>
-      <button class="mobile-nav-link" data-page="goals" onclick="showPage('goals')"><span class="text-lg">◎</span>Target</button>
-      <button class="mobile-nav-link" data-page="budgets" onclick="showPage('budgets')"><span class="text-lg">▤</span>Budget</button>
-      <button class="mobile-nav-link" data-page="profile" onclick="showPage('profile')"><span class="text-lg">◉</span>Profil</button>
-      <button class="mobile-nav-link" data-page="settings" onclick="showPage('settings')"><span class="text-lg">⚙</span>Setelan</button>
-      <button class="mobile-nav-link" data-page="calendar" onclick="showPage('calendar')"><span class="text-lg">▦</span>Kalender</button>
-      <button class="mobile-nav-link" data-page="recurring" onclick="showPage('recurring')"><span class="text-lg">↻</span>Rutin</button>
-      <button class="mobile-nav-link" data-page="reports" onclick="showPage('reports')"><span class="text-lg">▥</span>Laporan</button>
+  <!-- V5 Mobile navigation: always pinned to viewport bottom -->
+  <div id="mobileMenuBackdrop" class="fixed inset-0 z-[60] hidden bg-slate-950/35 backdrop-blur-sm lg:hidden" onclick="toggleMobileMenu(false)" aria-hidden="true"></div>
+  <section id="mobileMenuSheet" class="mobile-menu-sheet fixed inset-x-3 z-[65] mx-auto hidden max-w-2xl rounded-3xl border border-blue-100 bg-white/95 p-4 shadow-2xl backdrop-blur-2xl lg:hidden" style="bottom:calc(82px + env(safe-area-inset-bottom));" aria-label="Menu lainnya">
+    <div class="mb-3 flex items-center justify-between gap-3">
+      <div><p class="tiny-label text-blue-600">FARHAN FINANCE</p><h2 class="mt-1 text-lg font-extrabold text-slate-900">Menu lainnya</h2></div>
+      <button type="button" class="header-action" onclick="toggleMobileMenu(false)" aria-label="Tutup menu">✕</button>
+    </div>
+    <div class="grid grid-cols-3 gap-2 sm:grid-cols-3">
+      <button class="mobile-menu-item" data-page="goals" onclick="showPage('goals')"><span class="menu-icon">◎</span><span>Target</span></button>
+      <button class="mobile-menu-item" data-page="budgets" onclick="showPage('budgets')"><span class="menu-icon">▤</span><span>Budget</span></button>
+      <button class="mobile-menu-item" data-page="profile" onclick="showPage('profile')"><span class="menu-icon">◉</span><span>Profil</span></button>
+      <button class="mobile-menu-item" data-page="recurring" onclick="showPage('recurring')"><span class="menu-icon">↻</span><span>Transaksi rutin</span></button>
+      <button class="mobile-menu-item" data-page="reports" onclick="showPage('reports')"><span class="menu-icon">▥</span><span>Laporan</span></button>
+      <button class="mobile-menu-item" data-page="settings" onclick="showPage('settings')"><span class="menu-icon">⚙</span><span>Pengaturan</span></button>
+    </div>
+    <button type="button" onclick="signOut()" class="mt-3 flex w-full items-center justify-center gap-2 rounded-2xl border border-rose-100 bg-rose-50 px-4 py-3 text-sm font-bold text-rose-700 transition active:scale-[.98]"><span>↪</span> Keluar akun</button>
+  </section>
+  <nav id="mobileNav" class="fixed inset-x-0 bottom-0 z-[70] hidden border-t border-blue-100/80 bg-white/90 px-2 pt-2 backdrop-blur-2xl lg:hidden" aria-label="Navigasi utama">
+    <div class="mobile-dock mx-auto grid max-w-2xl grid-cols-5 items-end gap-1 pb-[max(.45rem,env(safe-area-inset-bottom))]">
+      <button class="mobile-nav-link active" data-page="dashboard" onclick="showPage('dashboard')" aria-label="Dashboard"><span class="dock-icon">⌂</span><span>Home</span></button>
+      <button class="mobile-nav-link" data-page="transactions" onclick="showPage('transactions')" aria-label="Transaksi"><span class="dock-icon">⇄</span><span>Transaksi</span></button>
+      <button class="mobile-add-button" type="button" onclick="toggleMobileMenu(false);openTransactionModal()" aria-label="Tambah transaksi"><span>＋</span></button>
+      <button class="mobile-nav-link" data-page="calendar" onclick="showPage('calendar')" aria-label="Kalender"><span class="dock-icon">▦</span><span>Kalender</span></button>
+      <button id="mobileMenuToggle" class="mobile-nav-link" type="button" onclick="toggleMobileMenu()" aria-expanded="false" aria-controls="mobileMenuSheet" aria-label="Menu lainnya"><span class="dock-icon">☰</span><span>Menu</span></button>
     </div>
   </nav>
 
@@ -632,6 +719,8 @@
 
     async function init() {
       const today = localDateString(new Date());
+      applyV5Visuals();
+      initV5Interactions();
       document.getElementById('transactionDate').value = today;
       document.getElementById('rateDate').value = today;
       document.getElementById('budgetMonth').value = today.slice(0, 7);
@@ -647,7 +736,7 @@
       document.getElementById('accountModal').addEventListener('click', e => {
         if (e.target.id === 'accountModal') closeModal('accountModal');
       });
-      document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal('transactionModal'); closeModal('accountModal'); } });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal('transactionModal'); closeModal('accountModal'); toggleMobileMenu(false); } });
 
       if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
         navigator.serviceWorker.register('./sw.js').catch(err => console.warn('Service worker registration failed:', err));
@@ -749,6 +838,7 @@
     }
 
     async function signOut() {
+      toggleMobileMenu(false);
       if (!sb) return;
       const { error } = await sb.auth.signOut();
       if (error) showToast(error.message, 'error');
@@ -792,6 +882,7 @@
       renderAccounts();
       renderProfileHeader();
       renderGoals();
+      renderV5Planner();
       renderBudgets();
       renderInsights();
       renderFinancialPulse();
@@ -861,6 +952,24 @@
       if (page === 'calendar') renderCalendar();
       if (page === 'recurring') renderRecurringRules();
       if (page === 'reports') renderReport();
+      const primaryMobilePages = ['dashboard','transactions','calendar'];
+      const menuToggle = document.getElementById('mobileMenuToggle');
+      if (menuToggle) menuToggle.classList.toggle('active', !primaryMobilePages.includes(page));
+      toggleMobileMenu(false);
+      if (window.matchMedia && window.matchMedia('(max-width: 1023px)').matches) {
+        window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+      }
+    }
+
+    function toggleMobileMenu(force) {
+      const sheet = document.getElementById('mobileMenuSheet');
+      const backdrop = document.getElementById('mobileMenuBackdrop');
+      const toggle = document.getElementById('mobileMenuToggle');
+      if (!sheet || !backdrop) return;
+      const open = typeof force === 'boolean' ? force : sheet.classList.contains('hidden');
+      sheet.classList.toggle('hidden', !open);
+      backdrop.classList.toggle('hidden', !open);
+      if (toggle) toggle.setAttribute('aria-expanded', String(open));
     }
 
     function localDateString(date) {
@@ -2362,6 +2471,90 @@
       showToast('File CSV berhasil disiapkan.', 'success');
     }
 
-  </script>
+  
+
+    /* V5: premium visual system, fixed mobile dock, tactile feedback and savings planner. */
+    function applyV5Visuals() {
+      const egp = document.getElementById('egpAssets')?.closest('article');
+      const idr = document.getElementById('idrAssets')?.closest('article');
+      if (egp) egp.classList.add('v5-balance-card','v5-balance-egp');
+      if (idr) idr.classList.add('v5-balance-card','v5-balance-idr');
+    }
+
+    function initV5Interactions() {
+      if (document.documentElement.dataset.v5Interactions === 'ready') return;
+      document.documentElement.dataset.v5Interactions = 'ready';
+      document.addEventListener('pointerdown', event => {
+        if (event.pointerType === 'mouse' && event.button !== 0) return;
+        const control = event.target.closest('.nav-link,.mobile-nav-link,.mobile-add-button,.mobile-menu-item,.quick-action,.btn-primary,.btn-quiet,.header-action');
+        if (!control || control.disabled || event.target.closest('input,textarea,select')) return;
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const rect = control.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height) * 1.35;
+        const ripple = document.createElement('span');
+        ripple.className = 'v5-touch-ripple';
+        ripple.style.width = ripple.style.height = `${size}px`;
+        ripple.style.left = `${event.clientX - rect.left - size/2}px`;
+        ripple.style.top = `${event.clientY - rect.top - size/2}px`;
+        control.classList.add('v5-ripple-host');
+        control.appendChild(ripple);
+        ripple.addEventListener('animationend', () => ripple.remove(), { once:true });
+      }, { passive:true });
+    }
+
+    function renderV5Planner() {
+      const select = document.getElementById('v5PlannerGoal');
+      if (!select) return;
+      const previous = select.value;
+      if (!v2SchemaReady || !savingGoals.length) {
+        select.innerHTML = '<option value="">Buat target tabungan terlebih dahulu</option>';
+        const result = document.getElementById('v5PlannerResult');
+        if (result) result.innerHTML = "Planner akan aktif setelah kamu membuat target di halaman <button type=\"button\" class=\"font-extrabold text-blue-700 underline\" onclick=\"showPage('goals')\">Target tabungan</button>.";
+        return;
+      }
+      select.innerHTML = '<option value="">Pilih target tabungan</option>' + savingGoals.map(goal => `<option value="${escapeHtml(goal.id)}">${escapeHtml(goal.icon || '🎯')} ${escapeHtml(goal.title)} · ${goal.currency}</option>`).join('');
+      if (savingGoals.some(goal => goal.id === previous)) select.value = previous;
+      calculateV5Planner(false);
+    }
+
+    function addMonthsClamped(date, months) {
+      const target = new Date(date.getFullYear(), date.getMonth() + months, 1);
+      const lastDay = new Date(target.getFullYear(), target.getMonth() + 1, 0).getDate();
+      target.setDate(Math.min(date.getDate(), lastDay));
+      return target;
+    }
+
+    function calculateV5Planner(showValidation=true) {
+      const select = document.getElementById('v5PlannerGoal');
+      const input = document.getElementById('v5PlannerMonthly');
+      const result = document.getElementById('v5PlannerResult');
+      if (!select || !input || !result) return;
+      const goal = savingGoals.find(item => item.id === select.value);
+      const monthly = Number(input.value);
+      if (!goal) {
+        result.innerHTML = 'Pilih target tabungan terlebih dahulu untuk menghitung simulasi.';
+        return;
+      }
+      const target = Number(goal.target_amount || 0);
+      const current = goalCurrentAmount(goal.id);
+      const remaining = Math.max(0, target-current);
+      if (remaining <= 0) {
+        result.innerHTML = `<div class="flex items-start gap-3"><span class="v5-planner-result-icon">✓</span><div><p class="font-extrabold text-blue-950">Target sudah tercapai!</p><p class="mt-1 text-xs text-blue-800/75">${escapeHtml(goal.title)} sudah mencapai ${escapeHtml(formatMoney(current,goal.currency))}. Simulasi tidak mengubah data transaksi.</p></div></div>`;
+        return;
+      }
+      if (!(monthly > 0) || !Number.isFinite(monthly)) {
+        result.innerHTML = `<div class="flex items-start gap-3"><span class="v5-planner-result-icon">✦</span><div><p class="font-extrabold text-blue-950">${escapeHtml(goal.title)}</p><p class="mt-1 text-xs text-blue-800/75">Sisa target <strong>${escapeHtml(formatMoney(remaining,goal.currency))}</strong>. Masukkan setoran bulanan untuk menghitung estimasi waktu.</p></div></div>`;
+        if (showValidation && input.value) input.focus();
+        return;
+      }
+      const months = Math.max(1,Math.ceil(remaining/monthly));
+      const estimate = addMonthsClamped(new Date(),months);
+      const estimateText = new Intl.DateTimeFormat('id-ID',{month:'long',year:'numeric'}).format(estimate);
+      const requiredMonthly = goal.deadline ? (()=>{ const d=new Date(`${goal.deadline}T12:00:00`); const now=new Date(); const count=Math.max(1,(d.getFullYear()-now.getFullYear())*12+(d.getMonth()-now.getMonth())+(d.getDate()>now.getDate()?1:0)); return remaining/count; })() : null;
+      const behindDeadline = goal.deadline && estimate > new Date(`${goal.deadline}T23:59:59`);
+      result.innerHTML = `<div class="grid grid-cols-1 gap-3 sm:grid-cols-3"><div><p class="text-[10px] font-extrabold uppercase tracking-wider text-blue-700/65">Sisa target</p><p class="mt-1 text-lg font-extrabold text-blue-950">${escapeHtml(formatMoney(remaining,goal.currency))}</p></div><div><p class="text-[10px] font-extrabold uppercase tracking-wider text-blue-700/65">Estimasi waktu</p><p class="mt-1 text-lg font-extrabold text-blue-950">${months} bulan</p><p class="text-[11px] text-blue-800/75">Sekitar ${escapeHtml(estimateText)}</p></div><div><p class="text-[10px] font-extrabold uppercase tracking-wider text-blue-700/65">Setoran per bulan</p><p class="mt-1 text-lg font-extrabold text-blue-950">${escapeHtml(formatMoney(monthly,goal.currency))}</p><p class="text-[11px] text-blue-800/75">Simulasi, bukan transaksi</p></div></div>${goal.deadline && requiredMonthly ? `<div class="mt-3 rounded-xl ${behindDeadline?'bg-amber-100/80 text-amber-900':'bg-white/70 text-blue-900'} p-3 text-xs leading-5">${behindDeadline?'Dengan setoran ini, target diperkirakan tercapai setelah tenggat.':'Setoran ini sesuai atau lebih cepat dari tenggat target.'} Untuk mencapai tenggat ${escapeHtml(formatDate(goal.deadline))}, perkiraan kebutuhan setoran sekitar <strong>${escapeHtml(formatMoney(requiredMonthly,goal.currency))}/bulan</strong>.</div>`:''}`;
+    }
+
+</script>
 </body>
 </html>

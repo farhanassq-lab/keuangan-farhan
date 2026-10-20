@@ -2,14 +2,14 @@
   "id": "./",
   "name": "Farhan Finance — Keuangan & Tabungan",
   "short_name": "Farhan Finance",
-  "description": "Farhan Finance V4: catat transaksi, kalender keuangan, transaksi berulang, laporan bulanan, backup data, target dan budget dengan dukungan EGP serta IDR.",
+  "description": "Farhan Finance V5: desain biru premium, navigasi mobile tetap, kalender, transaksi berulang, laporan, perencana tabungan, dan dukungan EGP serta IDR.",
   "lang": "id-ID",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#10152F",
-  "theme_color": "#10152F",
+  "background_color": "#0b1534",
+  "theme_color": "#0b1534",
   "icons": [
     {
       "src": "./icons/icon-192.png",
