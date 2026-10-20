@@ -2,7 +2,7 @@
   "id": "./",
   "name": "Farhan Finance — Keuangan & Tabungan",
   "short_name": "Farhan Finance",
-  "description": "Ruang keuangan personal untuk pemasukan, pengeluaran, tabungan, budget, EGP dan IDR.",
+  "description": "Farhan Finance V4: catat transaksi, kalender keuangan, transaksi berulang, laporan bulanan, backup data, target dan budget dengan dukungan EGP serta IDR.",
   "lang": "id-ID",
   "start_url": "./index.html",
   "scope": "./",

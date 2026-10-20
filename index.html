@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#10152F">
-  <meta name="description" content="Farhan Finance — ruang keuangan personal dengan target, budget, insight, dan dukungan EGP serta IDR.">
+  <meta name="description" content="Farhan Finance V4 — kalender keuangan, transaksi berulang, laporan bulanan, backup aman, dan dukungan EGP serta IDR.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <title>Farhan Finance — Keuangan & Tabungan</title>
+  <title>Farhan Finance — Personal Finance V4</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -145,6 +145,28 @@
     @media(max-width:640px) { .card,.pulse-card { border-radius:20px; } .profile-hero { border-radius:22px; } .pulse-metric { padding:11px; } .header-action { padding:9px; } }
     @media(prefers-reduced-motion:reduce) { .nav-link.active::after,.profile-hero::before { animation:none !important; } }
 
+
+    /* Farhan Finance V4 — calendar, recurring plans and reports */
+    .v4-feature-banner { background:radial-gradient(circle at 90% 0%,rgba(94,234,212,.23),transparent 28%),radial-gradient(circle at 0% 100%,rgba(129,140,248,.3),transparent 36%),linear-gradient(125deg,#10152f,#1f2360 68%,#3730a3); }
+    .calendar-cell { min-height:88px; padding:8px 5px; border:1px solid #e8edf5; border-radius:13px; background:rgba(255,255,255,.9); text-align:center; transition:transform .16s,border-color .16s,background .16s,box-shadow .16s; }
+    .calendar-cell:hover { transform:translateY(-2px); border-color:#a5b4fc; box-shadow:0 8px 18px rgba(79,70,229,.08); }
+    .calendar-cell.selected { border-color:#6366f1; background:linear-gradient(145deg,#eef2ff,#fff); box-shadow:inset 0 0 0 1px #818cf8; }
+    .calendar-cell.today .calendar-day-number { display:inline-flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:9px;background:#4f46e5;color:white; }
+    .calendar-cell.outside { opacity:.35; }
+    .calendar-dot { display:inline-block;width:5px;height:5px;border-radius:999px;margin:0 1px; }
+    .report-stat { position:relative;overflow:hidden;border:1px solid #e8edf5;border-radius:20px;background:linear-gradient(145deg,#fff,#f8faff);padding:16px; }
+    .report-stat::after { content:"";position:absolute;width:90px;height:90px;right:-35px;top:-40px;border-radius:999px;background:rgba(99,102,241,.07); }
+    .recurring-row { border:1px solid #e8edf5;border-radius:18px;padding:15px;background:linear-gradient(135deg,#fff,#fbfcff);transition:border-color .18s,transform .18s; }
+    .recurring-row:hover { border-color:#c7d2fe;transform:translateY(-1px); }
+    .status-pill { display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 9px;font-size:10px;font-weight:800; }
+    .status-pill::before { content:"";width:6px;height:6px;border-radius:999px;background:currentColor; }
+    .file-drop { border:1px dashed #c7d2fe;background:linear-gradient(145deg,#f8faff,#f0fdfa);border-radius:18px;padding:18px; }
+    .report-bar { height:8px;border-radius:999px;background:#eef2ff;overflow:hidden; }
+    .report-bar > span { display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#6366f1,#5eead4); }
+    aside nav { max-height:calc(100dvh - 255px); overflow-y:auto; scrollbar-width:thin; scrollbar-color:rgba(148,163,184,.35) transparent; }
+    #mobileNav .mobile-nav-link { flex:0 0 66px; }
+    @media(max-width:640px) { .calendar-cell { min-height:65px;padding:6px 2px;border-radius:10px; } .calendar-day-amount { font-size:8px!important; } .calendar-cell .calendar-count { font-size:8px!important; } }
+
   </style>
 </head>
 <body class="min-h-screen antialiased">
@@ -233,6 +255,10 @@
         <button class="nav-link" data-page="budgets" onclick="showPage('budgets')"><span>▤</span> Budget bulanan</button>
         <button class="nav-link" data-page="profile" onclick="showPage('profile')"><span>◉</span> Profil saya</button>
         <button class="nav-link" data-page="settings" onclick="showPage('settings')"><span>⚙</span> Pengaturan</button>
+        <p class="tiny-label mb-3 mt-6 px-3 text-slate-500">Perencanaan</p>
+        <button class="nav-link" data-page="calendar" onclick="showPage('calendar')"><span>▦</span> Kalender keuangan</button>
+        <button class="nav-link" data-page="recurring" onclick="showPage('recurring')"><span>↻</span> Transaksi berulang</button>
+        <button class="nav-link" data-page="reports" onclick="showPage('reports')"><span>▥</span> Laporan bulanan</button>
       </nav>
       <div class="mt-auto rounded-2xl border border-white/10 bg-white/5 p-4">
         <div class="flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-emerald-400"></span><span class="text-xs font-semibold text-slate-200">Data terlindungi</span></div>
@@ -302,11 +328,12 @@
             </article>
           </div>
 
-          <section class="grid grid-cols-2 gap-3 lg:grid-cols-4" aria-label="Aksi cepat">
+          <section class="grid grid-cols-2 gap-3 lg:grid-cols-5" aria-label="Aksi cepat">
             <button class="quick-action" onclick="openQuickTransaction('income')"><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-xl text-emerald-700">↙</span><span class="text-left"><span class="block text-sm">Pemasukan</span><span class="mt-0.5 block text-[10px] font-medium text-slate-400">Catat uang masuk</span></span></button>
             <button class="quick-action" onclick="openQuickTransaction('expense')"><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-rose-50 text-xl text-rose-700">↗</span><span class="text-left"><span class="block text-sm">Pengeluaran</span><span class="mt-0.5 block text-[10px] font-medium text-slate-400">Catat uang keluar</span></span></button>
             <button class="quick-action" onclick="openQuickTransaction('savings')"><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-xl text-indigo-700">◎</span><span class="text-left"><span class="block text-sm">Menabung</span><span class="mt-0.5 block text-[10px] font-medium text-slate-400">Tambah progres target</span></span></button>
             <button class="quick-action" onclick="showPage('budgets')"><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-xl text-amber-700">▤</span><span class="text-left"><span class="block text-sm">Budget</span><span class="mt-0.5 block text-[10px] font-medium text-slate-400">Atur batas belanja</span></span></button>
+            <button class="quick-action" onclick="showPage('calendar')"><span class="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-xl text-cyan-700">▦</span><span class="text-left"><span class="block text-sm">Kalender</span><span class="mt-0.5 block text-[10px] font-medium text-slate-400">Lihat per tanggal</span></span></button>
           </section>
 
           <section class="grid grid-cols-1 gap-4 xl:grid-cols-[1.05fr_.95fr]" aria-label="Ringkasan dan pengingat pintar">
@@ -355,6 +382,21 @@
             <div class="mb-4 flex items-center justify-between gap-3"><div><h3 class="font-extrabold text-slate-900">Transaksi terbaru</h3><p class="mt-1 text-xs text-slate-500">Aktivitas keuangan terakhir</p></div><button onclick="showPage('transactions')" class="text-xs font-bold text-indigo-600 hover:text-indigo-800">Lihat semua →</button></div>
             <div id="recentTransactions" class="divide-y divide-slate-100"><div class="py-8 text-center text-sm text-slate-400">Memuat transaksi...</div></div>
           </article>
+        </section>
+
+        <section id="page-calendar" class="page-panel space-y-5">
+          <div class="v4-feature-banner relative overflow-hidden rounded-3xl p-5 text-white shadow-lg sm:p-7">
+            <div class="absolute -right-8 -top-10 h-40 w-40 rounded-full border border-white/10"></div><div class="absolute right-20 top-20 h-20 w-20 rounded-full bg-cyan-300/10 blur-2xl"></div>
+            <div class="relative flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p class="tiny-label text-cyan-200">V4 · MONEY TIMELINE</p><h2 class="mt-2 text-2xl font-extrabold sm:text-3xl">Kalender keuangan</h2><p class="mt-2 max-w-xl text-sm leading-6 text-indigo-100/80">Lihat kapan uang masuk dan keluar. Pilih tanggal untuk memeriksa aktivitas secara rinci.</p></div><button class="rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-bold transition hover:bg-white/15" onclick="openTransactionModal()">＋ Catat transaksi</button></div>
+          </div>
+          <article class="card p-4 sm:p-6">
+            <div class="mb-5 flex flex-wrap items-center justify-between gap-3"><div><p class="tiny-label text-indigo-600">PILIH PERIODE</p><h3 class="mt-1 text-lg font-extrabold text-slate-900">Aktivitas per tanggal</h3></div><div class="flex items-center gap-2"><button class="btn-quiet !px-3 !py-2" aria-label="Bulan sebelumnya" onclick="shiftCalendarMonth(-1)">←</button><input id="calendarMonth" class="field !w-auto !py-2 text-sm font-bold" type="month" onchange="renderCalendar()"><button class="btn-quiet !px-3 !py-2" aria-label="Bulan berikutnya" onclick="shiftCalendarMonth(1)">→</button></div></div>
+            <div id="calendarMonthSummary" class="mb-5 grid grid-cols-1 gap-3 sm:grid-cols-2"></div>
+            <div class="mb-2 grid grid-cols-7 gap-1.5 text-center text-[10px] font-extrabold uppercase tracking-wide text-slate-400 sm:gap-2"><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span><span>Min</span></div>
+            <div id="calendarGrid" class="grid grid-cols-7 gap-1.5 sm:gap-2" aria-label="Kalender transaksi"></div>
+            <div class="mt-4 flex flex-wrap gap-3 text-[10px] font-semibold text-slate-500"><span><i class="calendar-dot bg-emerald-500"></i> Pemasukan</span><span><i class="calendar-dot bg-rose-500"></i> Pengeluaran</span><span><i class="calendar-dot bg-indigo-500"></i> Tabungan/transfer</span></div>
+          </article>
+          <article class="card p-4 sm:p-6"><div class="mb-4 flex flex-wrap items-center justify-between gap-2"><div><p class="tiny-label text-indigo-600">DETAIL HARIAN</p><h3 id="calendarSelectedTitle" class="mt-1 text-lg font-extrabold text-slate-900">Pilih tanggal</h3></div><span id="calendarSelectedCount" class="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-600">0 transaksi</span></div><div id="calendarDayTransactions" class="space-y-2"><p class="text-sm text-slate-400">Pilih tanggal di kalender untuk melihat transaksi.</p></div></article>
         </section>
 
         <section id="page-transactions" class="page-panel space-y-5">
@@ -408,6 +450,34 @@
           </div>
         </section>
 
+        <section id="page-recurring" class="page-panel space-y-5">
+          <div class="v4-feature-banner relative overflow-hidden rounded-3xl p-5 text-white shadow-lg sm:p-7"><div class="absolute -right-10 -top-12 h-44 w-44 rounded-full border border-white/10"></div><div class="relative"><p class="tiny-label text-cyan-200">V4 · RECURRING PLANS</p><h2 class="mt-2 text-2xl font-extrabold sm:text-3xl">Transaksi berulang</h2><p class="mt-2 max-w-2xl text-sm leading-6 text-indigo-100/80">Siapkan pemasukan atau pengeluaran rutin. Farhan Finance tidak mencatat otomatis tanpa konfirmasi; kamu tetap mengontrol setiap transaksi.</p></div></div>
+          <div id="recurringMigrationNotice" class="hidden rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900">Fitur transaksi berulang memerlukan migrasi database V4. Jalankan file <code>supabase/v4_migration.sql</code> di Supabase SQL Editor, lalu muat ulang data.</div>
+          <div class="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+            <article class="card p-5 sm:p-6"><div class="mb-4"><p class="tiny-label text-indigo-600">JADWAL BARU</p><h3 id="recurringFormTitle" class="mt-1 font-extrabold text-slate-900">Buat transaksi rutin</h3><p class="mt-1 text-xs leading-5 text-slate-500">Contoh: sewa bulanan, uang saku, atau biaya internet.</p></div>
+              <form id="recurringForm" class="space-y-3" onsubmit="saveRecurringRule(event)"><input id="recurringId" type="hidden">
+                <div><label for="recurringTitle" class="mb-1.5 block text-xs font-bold text-slate-600">Nama jadwal *</label><input id="recurringTitle" class="field" maxlength="100" required placeholder="Contoh: Sewa kontrakan"></div>
+                <div class="grid grid-cols-2 gap-3"><div><label for="recurringType" class="mb-1.5 block text-xs font-bold text-slate-600">Jenis *</label><select id="recurringType" class="field" required><option value="expense">Pengeluaran</option><option value="income">Pemasukan</option></select></div><div><label for="recurringFrequency" class="mb-1.5 block text-xs font-bold text-slate-600">Frekuensi *</label><select id="recurringFrequency" class="field" required><option value="monthly">Bulanan</option><option value="weekly">Mingguan</option></select></div></div>
+                <div><label for="recurringCategory" class="mb-1.5 block text-xs font-bold text-slate-600">Kategori *</label><select id="recurringCategory" class="field" required></select></div>
+                <div class="grid grid-cols-2 gap-3"><div><label for="recurringCurrency" class="mb-1.5 block text-xs font-bold text-slate-600">Mata uang *</label><select id="recurringCurrency" class="field" required><option value="EGP">EGP · Pound Mesir</option><option value="IDR">IDR · Rupiah</option></select></div><div><label for="recurringAmount" class="mb-1.5 block text-xs font-bold text-slate-600">Nominal *</label><input id="recurringAmount" class="field" type="number" min="0.01" step="0.01" required placeholder="0.00"></div></div>
+                <div><label id="recurringAccountLabel" for="recurringAccount" class="mb-1.5 block text-xs font-bold text-slate-600">Akun pembayaran *</label><select id="recurringAccount" class="field" required></select></div>
+                <div><label for="recurringNextDate" class="mb-1.5 block text-xs font-bold text-slate-600">Tanggal jatuh tempo berikutnya *</label><input id="recurringNextDate" class="field" type="date" required></div>
+                <div><label for="recurringNote" class="mb-1.5 block text-xs font-bold text-slate-600">Catatan (opsional)</label><input id="recurringNote" class="field" maxlength="500" placeholder="Keterangan untuk transaksi yang dibuat"></div>
+                <div class="flex gap-2"><button id="saveRecurringBtn" class="btn-primary flex-1" type="submit">Simpan jadwal</button><button id="cancelRecurringEditBtn" class="btn-quiet hidden" type="button" onclick="resetRecurringForm()">Batal</button></div>
+              </form>
+              <p class="mt-4 rounded-xl bg-indigo-50 p-3 text-xs leading-5 text-indigo-800">Jadwal yang jatuh tempo harus dicatat dengan menekan tombol konfirmasi. Sistem mencegah transaksi yang sama tercatat dua kali untuk tanggal jadwal yang sama.</p>
+            </article>
+            <article class="card p-5 sm:p-6"><div class="mb-4 flex flex-wrap items-center justify-between gap-2"><div><p class="tiny-label text-indigo-600">DAFTAR JADWAL</p><h3 class="mt-1 font-extrabold text-slate-900">Pemasukan & pengeluaran rutin</h3><p class="mt-1 text-xs text-slate-500">Jadwal aktif, dijeda, dan yang sudah jatuh tempo.</p></div><button class="btn-quiet !py-2 text-xs" onclick="loadData(true)">Muat ulang</button></div><div id="recurringRulesList" class="space-y-3"><p class="text-sm text-slate-400">Memuat jadwal...</p></div></article>
+          </div>
+        </section>
+
+        <section id="page-reports" class="page-panel space-y-5">
+          <div class="v4-feature-banner relative overflow-hidden rounded-3xl p-5 text-white shadow-lg sm:p-7"><div class="absolute -right-8 -top-12 h-44 w-44 rounded-full border border-white/10"></div><div class="relative"><p class="tiny-label text-cyan-200">V4 · MONTHLY REVIEW</p><h2 class="mt-2 text-2xl font-extrabold sm:text-3xl">Laporan bulanan</h2><p class="mt-2 max-w-2xl text-sm leading-6 text-indigo-100/80">Evaluasi arus kas, kategori pengeluaran, dan kebiasaan finansial. EGP dan IDR dianalisis terpisah agar tidak mencampur nominal.</p></div></div>
+          <article class="card p-4 sm:p-5"><div class="flex flex-wrap items-center justify-between gap-3"><div><p class="tiny-label text-indigo-600">PERIODE LAPORAN</p><h3 class="mt-1 font-extrabold text-slate-900">Pilih bulan & mata uang</h3></div><div class="flex flex-wrap gap-2"><input id="reportMonth" class="field !w-auto !py-2 text-sm font-bold" type="month" onchange="renderReport()"><select id="reportCurrency" class="field !w-auto !py-2 text-sm font-bold" onchange="renderReport()"><option value="EGP">EGP</option><option value="IDR">IDR</option></select><button class="btn-primary !py-2 text-sm" onclick="exportMonthlyReportCsv()">Unduh laporan CSV</button></div></div></article>
+          <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4"><article class="report-stat"><p class="text-xs font-bold text-slate-500">Pemasukan</p><p id="reportIncome" class="mt-2 break-words text-xl font-extrabold text-emerald-700 money-value">—</p><p class="mt-1 text-[10px] text-slate-400">Total uang masuk</p></article><article class="report-stat"><p class="text-xs font-bold text-slate-500">Pengeluaran</p><p id="reportExpense" class="mt-2 break-words text-xl font-extrabold text-rose-700 money-value">—</p><p class="mt-1 text-[10px] text-slate-400">Total uang keluar</p></article><article class="report-stat"><p class="text-xs font-bold text-slate-500">Tabungan dipindahkan</p><p id="reportSavings" class="mt-2 break-words text-xl font-extrabold text-indigo-700 money-value">—</p><p class="mt-1 text-[10px] text-slate-400">Perpindahan ke akun tabungan</p></article><article class="report-stat"><p class="text-xs font-bold text-slate-500">Arus kas bersih</p><p id="reportNet" class="mt-2 break-words text-xl font-extrabold text-slate-900 money-value">—</p><p class="mt-1 text-[10px] text-slate-400">Pemasukan − pengeluaran</p></article></div>
+          <div class="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]"><article class="card p-5 sm:p-6"><div class="mb-4"><p class="tiny-label text-indigo-600">SPENDING MIX</p><h3 class="mt-1 font-extrabold text-slate-900">Pengeluaran per kategori</h3><p class="mt-1 text-xs text-slate-500">Kategori dengan pengeluaran terbesar di periode terpilih.</p></div><div class="chart-wrap"><canvas id="reportCategoryChart" aria-label="Grafik pengeluaran berdasarkan kategori"></canvas></div><div id="reportCategoryList" class="mt-4 space-y-3"></div></article><article class="card p-5 sm:p-6"><div class="mb-4 flex flex-wrap items-center justify-between gap-2"><div><p class="tiny-label text-indigo-600">TRANSACTION REVIEW</p><h3 class="mt-1 font-extrabold text-slate-900">Aktivitas bulan ini</h3><p id="reportTransactionCount" class="mt-1 text-xs text-slate-500">0 transaksi</p></div><button class="text-xs font-bold text-indigo-600" onclick="showPage('transactions')">Buka riwayat →</button></div><div id="reportTransactionsList" class="space-y-2"><p class="text-sm text-slate-400">Belum ada transaksi pada periode ini.</p></div></article></div>
+        </section>
+
         <section id="page-profile" class="page-panel space-y-5">
           <div><p class="tiny-label text-indigo-600">IDENTITAS AKUN</p><h2 class="mt-2 text-2xl font-extrabold text-slate-900">Profil saya</h2><p class="mt-2 text-sm text-slate-500">Personalisasi tampilan Farhan Finance dengan nama dan foto pilihanmu.</p></div>
           <div class="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.3fr)]">
@@ -437,6 +507,12 @@
             </article>
           </div>
           <article class="card p-5 sm:p-6">
+            <div class="mb-4 flex items-start gap-3"><div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-700">⇧</div><div><p class="tiny-label text-indigo-600">DATA PORTABILITY</p><h3 class="mt-1 font-extrabold text-slate-900">Backup & restore</h3><p class="mt-1 text-xs leading-5 text-slate-500">Simpan salinan data ke file JSON pribadi. Restore akan menggabungkan data berdasarkan ID; data yang tidak ada di file tidak dihapus.</p></div></div>
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2"><div class="file-drop"><p class="text-sm font-extrabold text-slate-800">Backup data</p><p class="mt-1 text-xs leading-5 text-slate-500">Profil, akun, transaksi, kurs, target, budget, dan jadwal rutin.</p><button class="btn-primary mt-3 w-full" type="button" onclick="downloadBackupJson()">Unduh backup JSON</button></div><div class="file-drop"><p class="text-sm font-extrabold text-slate-800">Pulihkan data</p><p class="mt-1 text-xs leading-5 text-slate-500">Hanya backup milik akun yang sama. Data dengan ID sama akan diperbarui.</p><input id="backupImportFile" class="sr-only" type="file" accept="application/json,.json" onchange="restoreBackupJson(event)"><button class="btn-quiet mt-3 w-full" type="button" onclick="document.getElementById('backupImportFile').click()">Pilih file backup</button></div></div>
+            <p class="mt-3 rounded-xl border border-amber-100 bg-amber-50 p-3 text-[11px] leading-5 text-amber-800">File backup berisi data keuangan pribadi. Simpan di tempat aman dan jangan mengirimkannya ke orang lain. Pemulihan dilakukan bertahap; jika koneksi terputus, ulangi file yang sama untuk melanjutkan upsert tanpa menghapus data lain.</p>
+          </article>
+
+          <article class="card p-5 sm:p-6">
             <h3 class="font-extrabold text-slate-900">Akun & privasi</h3>
             <p id="profileEmail" class="mt-2 text-sm text-slate-500">—</p>
             <p class="mt-2 text-xs leading-5 text-slate-400">Data transaksi dibatasi menggunakan Supabase Row Level Security (RLS). Jangan pernah menaruh service_role key di frontend. Hanya URL project dan publishable/anon key yang boleh digunakan di sini.</p>
@@ -456,6 +532,9 @@
       <button class="mobile-nav-link" data-page="budgets" onclick="showPage('budgets')"><span class="text-lg">▤</span>Budget</button>
       <button class="mobile-nav-link" data-page="profile" onclick="showPage('profile')"><span class="text-lg">◉</span>Profil</button>
       <button class="mobile-nav-link" data-page="settings" onclick="showPage('settings')"><span class="text-lg">⚙</span>Setelan</button>
+      <button class="mobile-nav-link" data-page="calendar" onclick="showPage('calendar')"><span class="text-lg">▦</span>Kalender</button>
+      <button class="mobile-nav-link" data-page="recurring" onclick="showPage('recurring')"><span class="text-lg">↻</span>Rutin</button>
+      <button class="mobile-nav-link" data-page="reports" onclick="showPage('reports')"><span class="text-lg">▥</span>Laporan</button>
     </div>
   </nav>
 
@@ -540,6 +619,11 @@
     let profileData = null;
     let savingGoals = [];
     let budgets = [];
+    let recurringRules = [];
+    let v4SchemaReady = false;
+    let v4WarningShown = false;
+    let calendarSelectedDate = '';
+    let reportCategoryChart = null;
     let avatarSignedUrl = '';
     let v2SchemaReady = false;
     let v2WarningShown = false;
@@ -552,6 +636,7 @@
       document.getElementById('rateDate').value = today;
       document.getElementById('budgetMonth').value = today.slice(0, 7);
       document.getElementById('budgetCategory').innerHTML = CATEGORY_OPTIONS.expense.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+      initV4UI(today);
       initPrivacyMode();
       document.getElementById('transactionNote').addEventListener('input', () => {
         setText('noteCount', document.getElementById('transactionNote').value.length);
@@ -668,7 +753,7 @@
       const { error } = await sb.auth.signOut();
       if (error) showToast(error.message, 'error');
       else {
-        accounts = []; balances = []; transactions = []; latestRate = null;
+        accounts = []; balances = []; transactions = []; latestRate = null; recurringRules = [];
         showToast('Kamu sudah keluar.', 'success');
       }
     }
@@ -680,15 +765,15 @@
         const results = await Promise.all([
           sb.from('accounts').select('*').order('currency').order('account_type').order('name'),
           sb.from('account_balances').select('*').order('currency').order('account_type'),
-          sb.from('transactions').select('*').order('transaction_date', { ascending: false }).order('created_at', { ascending: false }).limit(1000),
           sb.from('exchange_rates').select('*').eq('base_currency', 'EGP').eq('quote_currency', 'IDR').order('rate_date', { ascending: false }).limit(1)
         ]);
         for (const result of results) if (result.error) throw result.error;
         accounts = results[0].data || [];
         balances = results[1].data || [];
-        transactions = results[2].data || [];
-        latestRate = (results[3].data || [])[0] || null;
+        latestRate = (results[2].data || [])[0] || null;
+        transactions = await fetchAllTransactions();
         await loadV2Data();
+        await loadV4Data();
         renderAll();
       } catch (error) {
         showToast(friendlyError(error), 'error');
@@ -712,6 +797,11 @@
       renderFinancialPulse();
       renderSmartReminders();
       updateGoalSelect();
+      updateRecurringCategoryOptions();
+      updateRecurringAccountOptions();
+      renderCalendar();
+      renderRecurringRules();
+      if (activePage === 'reports') renderReport();
       setText('lastUpdated', `Diperbarui ${new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date())}`);
     }
 
@@ -759,11 +849,18 @@
         goals: ['MENABUNG DENGAN TUJUAN', 'Target tabungan'],
         budgets: ['BATAS PENGELUARAN', 'Budget bulanan'],
         profile: ['IDENTITAS AKUN', 'Profil saya'],
-        settings: ['PREFERENSI', 'Pengaturan']
+        settings: ['PREFERENSI', 'Pengaturan'],
+        calendar: ['MONEY TIMELINE', 'Kalender keuangan'],
+        recurring: ['RECURRING PLANS', 'Transaksi berulang'],
+        reports: ['MONTHLY REVIEW', 'Laporan bulanan']
       };
-      setText('pageEyebrow', titles[page][0]);
-      setText('pageTitle', titles[page][1]);
+      const title = titles[page] || titles.dashboard;
+      setText('pageEyebrow', title[0]);
+      setText('pageTitle', title[1]);
       if (page === 'dashboard') renderCharts();
+      if (page === 'calendar') renderCalendar();
+      if (page === 'recurring') renderRecurringRules();
+      if (page === 'reports') renderReport();
     }
 
     function localDateString(date) {
@@ -1757,6 +1854,498 @@
         const tone = item.level === 'danger' ? 'bg-rose-100 text-rose-700' : item.level === 'warning' ? 'bg-amber-100 text-amber-700' : 'bg-indigo-100 text-indigo-700';
         return `<button type="button" class="reminder-row w-full text-left hover:border-indigo-200 hover:shadow-sm" onclick="showPage('${item.action}')"><span class="reminder-dot ${tone}">${item.icon}</span><span class="min-w-0 flex-1"><span class="block text-xs font-extrabold text-slate-800">${escapeHtml(item.title)}</span><span class="mt-1 block text-[11px] leading-5 text-slate-500">${escapeHtml(item.body)}</span></span><span class="mt-1 text-xs text-slate-400">›</span></button>`;
       }).join('');
+    }
+
+    // ---------------- Farhan Finance V4: calendar, recurring transactions, reports, backup/restore ----------------
+    function initV4UI(today) {
+      const month = (today || localDateString(new Date())).slice(0, 7);
+      const calendarMonth = document.getElementById('calendarMonth');
+      const reportMonth = document.getElementById('reportMonth');
+      if (calendarMonth) calendarMonth.value = month;
+      if (reportMonth) reportMonth.value = month;
+      calendarSelectedDate = today || localDateString(new Date());
+      const recurringDate = document.getElementById('recurringNextDate');
+      if (recurringDate) recurringDate.value = today || localDateString(new Date());
+      updateRecurringCategoryOptions();
+      updateRecurringAccountOptions();
+      ['recurringType','recurringCurrency'].forEach(id => {
+        const node = document.getElementById(id);
+        if (node) node.addEventListener('change', () => { updateRecurringCategoryOptions(); updateRecurringAccountOptions(); });
+      });
+    }
+
+    async function fetchAllTransactions() {
+      const all = [];
+      const pageSize = 1000;
+      let offset = 0;
+      while (true) {
+        const { data, error } = await sb.from('transactions').select('*')
+          .order('transaction_date', { ascending: false })
+          .order('created_at', { ascending: false })
+          .range(offset, offset + pageSize - 1);
+        if (error) throw error;
+        const rows = data || [];
+        all.push(...rows);
+        if (rows.length < pageSize) break;
+        offset += pageSize;
+        if (offset >= 100000) {
+          showToast('Riwayat sangat besar; hanya 100.000 transaksi terbaru dimuat.', 'info');
+          break;
+        }
+      }
+      return all;
+    }
+
+    async function loadV4Data() {
+      if (!sb || !currentUser) return;
+      try {
+        const { data, error } = await sb.from('recurring_rules').select('*').order('next_run_date', { ascending: true }).order('created_at', { ascending: false });
+        if (error) throw error;
+        recurringRules = data || [];
+        v4SchemaReady = true;
+        const notice = document.getElementById('recurringMigrationNotice');
+        if (notice) notice.classList.add('hidden');
+      } catch (error) {
+        recurringRules = [];
+        v4SchemaReady = false;
+        const notice = document.getElementById('recurringMigrationNotice');
+        if (notice) notice.classList.remove('hidden');
+        if (!v4WarningShown) {
+          v4WarningShown = true;
+          console.warn('Farhan Finance V4 migration not ready:', error);
+          showToast('Kalender dan laporan tetap bisa dipakai. Untuk transaksi berulang dan backup lengkap, jalankan supabase/v4_migration.sql.', 'info');
+        }
+      }
+    }
+
+    function shiftCalendarMonth(delta) {
+      const input = document.getElementById('calendarMonth');
+      const value = input.value || currentMonthKey();
+      const [year, month] = value.split('-').map(Number);
+      const next = new Date(year, month - 1 + delta, 1, 12);
+      input.value = `${next.getFullYear()}-${String(next.getMonth()+1).padStart(2,'0')}`;
+      renderCalendar();
+    }
+
+    function renderCalendar() {
+      const grid = document.getElementById('calendarGrid');
+      if (!grid) return;
+      const input = document.getElementById('calendarMonth');
+      const monthKey = input && input.value ? input.value : currentMonthKey();
+      const [year, month] = monthKey.split('-').map(Number);
+      if (!year || !month) return;
+      const first = new Date(year, month - 1, 1, 12);
+      const daysInMonth = new Date(year, month, 0, 12).getDate();
+      const mondayOffset = (first.getDay() + 6) % 7;
+      const today = localDateString(new Date());
+      const monthTransactions = transactions.filter(t => String(t.transaction_date || '').slice(0,7) === monthKey);
+      if (!calendarSelectedDate || calendarSelectedDate.slice(0,7) !== monthKey) {
+        calendarSelectedDate = monthKey === today.slice(0,7) ? today : `${monthKey}-01`;
+      }
+      const groups = new Map();
+      monthTransactions.forEach(t => {
+        const date = String(t.transaction_date || '');
+        if (!groups.has(date)) groups.set(date, []);
+        groups.get(date).push(t);
+      });
+      const monthName = new Intl.DateTimeFormat('id-ID', { month:'long', year:'numeric' }).format(first);
+      const summaryHost = document.getElementById('calendarMonthSummary');
+      const metrics = ['EGP','IDR'].map(currency => {
+        const items = monthTransactions.filter(t => t.currency === currency);
+        const income = items.filter(t => t.type === 'income').reduce((sum,t)=>sum+Number(t.amount||0),0);
+        const expense = items.filter(t => t.type === 'expense').reduce((sum,t)=>sum+Number(t.amount||0),0);
+        return `<div class="rounded-2xl border border-slate-100 bg-gradient-to-br from-white to-slate-50 p-4"><div class="flex items-center justify-between"><span class="text-xs font-extrabold text-slate-500">${currency==='EGP'?'ج.م':'Rp'} · ${currency}</span><span class="rounded-full ${currency==='EGP'?'bg-emerald-50 text-emerald-700':'bg-indigo-50 text-indigo-700'} px-2.5 py-1 text-[10px] font-extrabold">${items.length} transaksi</span></div><div class="mt-3 grid grid-cols-2 gap-3"><div><p class="text-[10px] text-slate-400">Pemasukan</p><p class="mt-1 break-words text-sm font-extrabold text-emerald-700 money-value">${escapeHtml(formatMoney(income,currency))}</p></div><div><p class="text-[10px] text-slate-400">Pengeluaran</p><p class="mt-1 break-words text-sm font-extrabold text-rose-700 money-value">${escapeHtml(formatMoney(expense,currency))}</p></div></div></div>`;
+      });
+      summaryHost.innerHTML = metrics.join('');
+      const cells = [];
+      for (let i=0;i<mondayOffset;i++) {
+        const d = new Date(year, month-1, 1 - (mondayOffset-i), 12);
+        const date = localDateString(d);
+        cells.push(`<div class="calendar-cell outside" aria-hidden="true"><span class="calendar-day-number text-xs font-bold">${d.getDate()}</span></div>`);
+      }
+      for (let day=1; day<=daysInMonth; day++) {
+        const date = `${monthKey}-${String(day).padStart(2,'0')}`;
+        const items = groups.get(date) || [];
+        const hasIncome = items.some(t=>t.type==='income');
+        const hasExpense = items.some(t=>t.type==='expense');
+        const hasOther = items.some(t=>t.type==='savings'||t.type==='transfer');
+        const dots = `${hasIncome?'<i class="calendar-dot bg-emerald-500"></i>':''}${hasExpense?'<i class="calendar-dot bg-rose-500"></i>':''}${hasOther?'<i class="calendar-dot bg-indigo-500"></i>':''}`;
+        const amountCurrencies = ['EGP','IDR'].filter(c=>items.some(t=>t.currency===c));
+        const title = items.length ? `${items.length} transaksi` : 'Tidak ada transaksi';
+        cells.push(`<button type="button" class="calendar-cell ${date===today?'today':''} ${date===calendarSelectedDate?'selected':''}" aria-label="${date}, ${title}" aria-pressed="${date===calendarSelectedDate}" onclick="selectCalendarDate('${date}')"><span class="calendar-day-number text-xs font-extrabold text-slate-700">${day}</span><span class="mt-1 block h-2">${dots}</span><span class="calendar-count mt-1 block text-[9px] font-bold ${items.length?'text-indigo-600':'text-slate-300'}">${items.length?`${items.length} item`:''}</span><span class="calendar-day-amount mt-0.5 block text-[8px] font-semibold text-slate-400">${amountCurrencies.join('·')}</span></button>`);
+      }
+      const trailing = (7 - (cells.length % 7)) % 7;
+      for (let i=1;i<=trailing;i++) {
+        const d = new Date(year, month, i, 12);
+        cells.push(`<div class="calendar-cell outside" aria-hidden="true"><span class="calendar-day-number text-xs font-bold">${d.getDate()}</span></div>`);
+      }
+      grid.innerHTML = cells.join('');
+      setText('calendarSelectedTitle', new Intl.DateTimeFormat('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date(`${calendarSelectedDate}T12:00:00`)));
+      renderCalendarDayDetails();
+    }
+
+    function selectCalendarDate(date) {
+      calendarSelectedDate = date;
+      const input = document.getElementById('calendarMonth');
+      if (input && input.value !== date.slice(0,7)) input.value = date.slice(0,7);
+      renderCalendar();
+    }
+
+    function renderCalendarDayDetails() {
+      const host = document.getElementById('calendarDayTransactions');
+      if (!host) return;
+      const rows = transactions.filter(t => t.transaction_date === calendarSelectedDate).sort((a,b)=>String(b.created_at||'').localeCompare(String(a.created_at||'')));
+      setText('calendarSelectedCount', `${rows.length} transaksi`);
+      if (!rows.length) {
+        host.innerHTML = `<div class="rounded-2xl border border-dashed border-slate-200 p-6 text-center"><div class="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl bg-slate-100 text-xl text-slate-400">＋</div><p class="mt-3 text-sm font-extrabold text-slate-700">Belum ada transaksi pada tanggal ini</p><p class="mt-1 text-xs text-slate-500">Kamu bisa langsung mencatat transaksi untuk tanggal terpilih.</p><button class="btn-primary mt-4 !py-2 text-xs" onclick="openTransactionForDate('${calendarSelectedDate}')">Tambah transaksi</button></div>`;
+        return;
+      }
+      host.innerHTML = rows.map(t => {
+        const label = TYPE_LABELS[t.type] || t.type;
+        const amountClass = t.type==='income'?'text-emerald-700':t.type==='expense'?'text-rose-700':'text-indigo-700';
+        return `<div class="flex items-center gap-3 rounded-2xl border border-slate-100 p-3 transition hover:border-indigo-200"><div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${t.type==='income'?'bg-emerald-50 text-emerald-700':t.type==='expense'?'bg-rose-50 text-rose-700':'bg-indigo-50 text-indigo-700'} font-extrabold">${t.type==='income'?'↙':t.type==='expense'?'↗':'⇄'}</div><div class="min-w-0 flex-1"><p class="truncate text-sm font-extrabold text-slate-800">${escapeHtml(t.category)}</p><p class="mt-1 truncate text-[11px] text-slate-500">${escapeHtml(t.note||label)} · ${escapeHtml(transactionAccountLabel(t))}</p></div><div class="text-right"><p class="text-sm font-extrabold ${amountClass} money-value">${t.type==='income'?'+':t.type==='expense'?'−':''}${escapeHtml(formatMoney(t.amount,t.currency))}</p><button class="mt-1 text-[10px] font-bold text-indigo-600" onclick="editTransaction('${t.id}')">Edit</button></div></div>`;
+      }).join('');
+    }
+
+    function openTransactionForDate(date) {
+      openTransactionModal();
+      const input = document.getElementById('transactionDate');
+      if (input) input.value = date;
+    }
+
+    function updateRecurringCategoryOptions(selected) {
+      const typeNode = document.getElementById('recurringType');
+      const select = document.getElementById('recurringCategory');
+      if (!typeNode || !select) return;
+      const type = typeNode.value;
+      const options = CATEGORY_OPTIONS[type] || ['Lainnya'];
+      const previous = selected || select.value;
+      select.innerHTML = options.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+      if (previous && options.includes(previous)) select.value = previous;
+    }
+
+    function updateRecurringAccountOptions(selected) {
+      const type = document.getElementById('recurringType')?.value || 'expense';
+      const currency = document.getElementById('recurringCurrency')?.value || 'EGP';
+      const select = document.getElementById('recurringAccount');
+      if (!select) return;
+      const previous = selected || select.value;
+      const options = accounts.filter(a=>a.currency===currency);
+      select.innerHTML = options.map(a=>`<option value="${a.id}">${escapeHtml(a.name)} · ${a.account_type==='cash'?'Saldo tersedia':'Tabungan'}</option>`).join('');
+      if (previous && options.some(a=>a.id===previous)) select.value = previous;
+      setText('recurringAccountLabel', type==='income'?'Akun penerima *':'Akun pembayaran *');
+    }
+
+    function resetRecurringForm() {
+      const form = document.getElementById('recurringForm');
+      if (form) form.reset();
+      setText('recurringFormTitle','Buat transaksi rutin');
+      setText('saveRecurringBtn','Simpan jadwal');
+      document.getElementById('recurringId').value = '';
+      document.getElementById('recurringNextDate').value = localDateString(new Date());
+      document.getElementById('recurringType').value = 'expense';
+      document.getElementById('recurringCurrency').value = profileData?.preferred_currency || 'EGP';
+      updateRecurringCategoryOptions();
+      updateRecurringAccountOptions();
+      document.getElementById('cancelRecurringEditBtn').classList.add('hidden');
+    }
+
+    async function saveRecurringRule(event) {
+      event.preventDefault();
+      if (!sb || !currentUser || isSaving) return;
+      if (!v4SchemaReady) return showToast('Jalankan supabase/v4_migration.sql terlebih dahulu.', 'error');
+      const id = document.getElementById('recurringId').value;
+      const title = document.getElementById('recurringTitle').value.trim();
+      const type = document.getElementById('recurringType').value;
+      const category = document.getElementById('recurringCategory').value;
+      const amount = Number(document.getElementById('recurringAmount').value);
+      const currency = document.getElementById('recurringCurrency').value;
+      const accountId = document.getElementById('recurringAccount').value;
+      const frequency = document.getElementById('recurringFrequency').value;
+      const nextDate = document.getElementById('recurringNextDate').value;
+      const note = document.getElementById('recurringNote').value.trim();
+      const account = accountById(accountId);
+      if (!title || !category || !nextDate || !Number.isFinite(amount) || amount <= 0) return showToast('Isi nama, kategori, tanggal, dan nominal yang valid.', 'error');
+      if (!account || account.currency !== currency) return showToast('Pilih akun yang mata uangnya sesuai.', 'error');
+      if (!['weekly','monthly'].includes(frequency)) return showToast('Frekuensi tidak valid.', 'error');
+      const existingRule = id ? recurringRules.find(rule => rule.id === id) : null;
+      const payload = { user_id:currentUser.id, title, type, category, amount, currency, account_id:accountId, frequency, next_run_date:nextDate, anchor_day:Number(nextDate.slice(8,10)), note, is_active:existingRule ? existingRule.is_active : true };
+      setButtonBusy('saveRecurringBtn',true,id?'Menyimpan perubahan...':'Menyimpan jadwal...');
+      let savedSuccessfully = false;
+      try {
+        const result = id
+          ? await sb.from('recurring_rules').update(payload).eq('id',id).eq('user_id',currentUser.id).select('id').single()
+          : await sb.from('recurring_rules').insert(payload).select('id').single();
+        if (result.error) throw result.error;
+        savedSuccessfully = true;
+        resetRecurringForm();
+        await loadData(false);
+        showToast(id?'Jadwal rutin diperbarui.':'Jadwal rutin dibuat.','success');
+      } catch (error) {
+        showToast(friendlyError(error),'error');
+      } finally {
+        setButtonBusy('saveRecurringBtn',false,savedSuccessfully?'Simpan jadwal':(id?'Simpan perubahan':'Simpan jadwal'));
+      }
+    }
+
+    function editRecurringRule(id) {
+      const rule = recurringRules.find(r=>r.id===id);
+      if (!rule) return showToast('Jadwal tidak ditemukan. Muat ulang data.', 'error');
+      document.getElementById('recurringId').value = rule.id;
+      document.getElementById('recurringTitle').value = rule.title || '';
+      document.getElementById('recurringType').value = rule.type;
+      document.getElementById('recurringFrequency').value = rule.frequency;
+      document.getElementById('recurringCurrency').value = rule.currency;
+      document.getElementById('recurringAmount').value = rule.amount;
+      document.getElementById('recurringNextDate').value = rule.next_run_date;
+      document.getElementById('recurringNote').value = rule.note || '';
+      updateRecurringCategoryOptions(rule.category);
+      updateRecurringAccountOptions(rule.account_id);
+      document.getElementById('recurringCategory').value = rule.category;
+      setText('recurringFormTitle','Edit transaksi rutin');
+      setText('saveRecurringBtn','Simpan perubahan');
+      document.getElementById('cancelRecurringEditBtn').classList.remove('hidden');
+      showPage('recurring');
+      document.getElementById('recurringTitle').focus();
+    }
+
+    async function deleteRecurringRule(id) {
+      const rule = recurringRules.find(r=>r.id===id);
+      if (!rule || !sb || !currentUser) return;
+      if (!confirm(`Hapus jadwal "${rule.title}"? Transaksi yang sudah tercatat akan tetap disimpan.`)) return;
+      showLoader('Menghapus jadwal...');
+      try {
+        const { error } = await sb.from('recurring_rules').delete().eq('id',id).eq('user_id',currentUser.id);
+        if (error) throw error;
+        await loadData(false);
+        showToast('Jadwal dihapus; transaksi sebelumnya tetap ada.','success');
+      } catch (error) { showToast(friendlyError(error),'error'); }
+      finally { hideLoader(); }
+    }
+
+    async function toggleRecurringRule(id) {
+      const rule = recurringRules.find(r=>r.id===id);
+      if (!rule || !sb || !currentUser || !v4SchemaReady) return;
+      showLoader(rule.is_active?'Menjeda jadwal...':'Mengaktifkan jadwal...');
+      try {
+        const { error } = await sb.from('recurring_rules').update({is_active:!rule.is_active}).eq('id',id).eq('user_id',currentUser.id);
+        if (error) throw error;
+        await loadData(false);
+        showToast(rule.is_active?'Jadwal dijeda.':'Jadwal diaktifkan.','success');
+      } catch (error) { showToast(friendlyError(error),'error'); }
+      finally { hideLoader(); }
+    }
+
+    function addFrequencyDate(dateString, frequency, anchorDay) {
+      const [year,month,day] = dateString.split('-').map(Number);
+      let next;
+      if (frequency === 'weekly') next = new Date(year,month-1,day+7,12);
+      else {
+        const desiredDay = Math.max(1,Math.min(31,Number(anchorDay)||day));
+        const daysNextMonth = new Date(year,month+1,0,12).getDate();
+        next = new Date(year,month,Math.min(desiredDay,daysNextMonth),12);
+      }
+      return localDateString(next);
+    }
+
+    async function recordRecurringOccurrence(id) {
+      const rule = recurringRules.find(r=>r.id===id);
+      if (!rule || !sb || !currentUser || !v4SchemaReady) return;
+      const today = localDateString(new Date());
+      if (!rule.is_active) return showToast('Jadwal sedang dijeda. Aktifkan terlebih dahulu.', 'info');
+      if (rule.next_run_date > today) return showToast(`Jadwal ini jatuh tempo pada ${formatDate(rule.next_run_date)}.`, 'info');
+      showLoader('Mencatat transaksi rutin...');
+      let transactionInserted = false;
+      try {
+        const existing = await sb.from('transactions').select('id').eq('recurring_rule_id',rule.id).eq('recurring_occurrence_date',rule.next_run_date).maybeSingle();
+        if (existing.error) throw existing.error;
+        let alreadyRecorded = !!existing.data;
+        if (!alreadyRecorded) {
+          const payload = {
+            user_id:currentUser.id, type:rule.type, category:rule.category, amount:Number(rule.amount), currency:rule.currency,
+            transaction_date:rule.next_run_date, note:rule.note || rule.title,
+            source_account_id:rule.type==='expense'?rule.account_id:null,
+            destination_account_id:rule.type==='income'?rule.account_id:null,
+            destination_amount:null, recurring_rule_id:rule.id, recurring_occurrence_date:rule.next_run_date
+          };
+          const { error } = await sb.from('transactions').insert(payload);
+          if (error) {
+            if (error.code === '23505' || /duplicate key|unique constraint/i.test(error.message || '')) {
+              const check = await sb.from('transactions').select('id').eq('recurring_rule_id',rule.id).eq('recurring_occurrence_date',rule.next_run_date).maybeSingle();
+              if (check.error || !check.data) throw error;
+              alreadyRecorded = true;
+            } else throw error;
+          } else transactionInserted = true;
+        }
+        const nextDate = addFrequencyDate(rule.next_run_date,rule.frequency,rule.anchor_day);
+        const { error: updateError } = await sb.from('recurring_rules').update({next_run_date:nextDate}).eq('id',rule.id).eq('user_id',currentUser.id);
+        if (updateError) {
+          await loadData(false);
+          return showToast(transactionInserted ? 'Transaksi tersimpan, tetapi jadwal belum maju. Tekan Catat jatuh tempo sekali lagi untuk menyinkronkan; duplikasi akan dicegah.' : friendlyError(updateError), 'error');
+        }
+        await loadData(false);
+        showToast(alreadyRecorded?'Transaksi sudah tercatat; jadwal berhasil disinkronkan.':'Transaksi rutin berhasil dicatat.','success');
+      } catch (error) {
+        if (transactionInserted) await loadData(false);
+        showToast(friendlyError(error),'error');
+      } finally { hideLoader(); }
+    }
+
+    function renderRecurringRules() {
+      const host = document.getElementById('recurringRulesList');
+      if (!host) return;
+      const notice = document.getElementById('recurringMigrationNotice');
+      if (!v4SchemaReady) {
+        if (notice) notice.classList.remove('hidden');
+        host.innerHTML = '<div class="rounded-2xl border border-dashed border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900">Jadwal berulang belum bisa dimuat. Jalankan migrasi V4 di Supabase, lalu tekan Muat ulang.</div>';
+        return;
+      }
+      if (notice) notice.classList.add('hidden');
+      if (!recurringRules.length) {
+        host.innerHTML = '<div class="rounded-2xl border border-dashed border-slate-200 p-7 text-center"><div class="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-50 text-2xl text-indigo-600">↻</div><p class="mt-3 text-sm font-extrabold text-slate-800">Belum ada transaksi rutin</p><p class="mt-1 text-xs leading-5 text-slate-500">Buat jadwal agar tagihan dan pemasukan berkala lebih mudah dipantau.</p></div>';
+        return;
+      }
+      const today = localDateString(new Date());
+      host.innerHTML = recurringRules.map(rule => {
+        const due = rule.is_active && rule.next_run_date <= today;
+        const account = accountById(rule.account_id);
+        const statusClass = !rule.is_active?'bg-slate-100 text-slate-500':due?'bg-amber-50 text-amber-700':'bg-emerald-50 text-emerald-700';
+        const status = !rule.is_active?'Dijeda':due?'Jatuh tempo':`Berikutnya ${formatDate(rule.next_run_date)}`;
+        const frequencyLabel = rule.frequency==='weekly'?'Mingguan':'Bulanan';
+        const amountClass = rule.type==='income'?'text-emerald-700':'text-rose-700';
+        return `<article class="recurring-row"><div class="flex items-start gap-3"><div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ${rule.type==='income'?'bg-emerald-50 text-emerald-700':'bg-rose-50 text-rose-700'} text-xl font-extrabold">${rule.type==='income'?'↙':'↗'}</div><div class="min-w-0 flex-1"><div class="flex flex-wrap items-center gap-2"><h4 class="text-sm font-extrabold text-slate-800">${escapeHtml(rule.title)}</h4><span class="status-pill ${statusClass}">${escapeHtml(status)}</span></div><p class="mt-1 text-xs text-slate-500">${escapeHtml(rule.category)} · ${frequencyLabel} · ${escapeHtml(account?.name||'Akun tidak ditemukan')}</p><p class="mt-2 text-lg font-extrabold ${amountClass} money-value">${escapeHtml(formatMoney(rule.amount,rule.currency))}<span class="ml-2 text-[10px] font-bold text-slate-400">${rule.type==='income'?'MASUK':'KELUAR'}</span></p>${rule.note?`<p class="mt-1 break-words text-xs text-slate-400">${escapeHtml(rule.note)}</p>`:''}</div></div><div class="mt-4 flex flex-wrap gap-2"><button class="btn-primary !px-3 !py-2 text-xs" ${due?'':'disabled'} onclick="recordRecurringOccurrence('${rule.id}')">${due?'Catat jatuh tempo':'Belum jatuh tempo'}</button><button class="btn-quiet !px-3 !py-2 text-xs" onclick="editRecurringRule('${rule.id}')">Edit</button><button class="btn-quiet !px-3 !py-2 text-xs" onclick="toggleRecurringRule('${rule.id}')">${rule.is_active?'Jeda':'Aktifkan'}</button><button class="rounded-xl border border-rose-100 px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50" onclick="deleteRecurringRule('${rule.id}')">Hapus</button></div></article>`;
+      }).join('');
+    }
+
+    function renderReport() {
+      const monthKey = document.getElementById('reportMonth')?.value || currentMonthKey();
+      const currency = document.getElementById('reportCurrency')?.value || 'EGP';
+      const monthRows = transactions.filter(t=>String(t.transaction_date||'').slice(0,7)===monthKey && t.currency===currency);
+      const total = type => monthRows.filter(t=>t.type===type).reduce((sum,t)=>sum+Number(t.amount||0),0);
+      const income = total('income'), expense = total('expense'), savings = total('savings'), net = income-expense;
+      setText('reportIncome',formatMoney(income,currency));
+      setText('reportExpense',formatMoney(expense,currency));
+      setText('reportSavings',formatMoney(savings,currency));
+      setText('reportNet',`${net<0?'−':net>0?'+':''}${formatMoney(Math.abs(net),currency)}`);
+      const netNode = document.getElementById('reportNet');
+      if (netNode) netNode.className = `mt-2 break-words text-xl font-extrabold money-value ${net<0?'text-rose-700':net>0?'text-emerald-700':'text-slate-900'}`;
+      const categories = new Map();
+      monthRows.filter(t=>t.type==='expense').forEach(t=>categories.set(t.category,(categories.get(t.category)||0)+Number(t.amount||0)));
+      const categoryRows = [...categories.entries()].sort((a,b)=>b[1]-a[1]);
+      const chartNode = document.getElementById('reportCategoryChart');
+      if (chartNode && window.Chart) {
+        if (reportCategoryChart) reportCategoryChart.destroy();
+        reportCategoryChart = new Chart(chartNode.getContext('2d'), {
+          type:'bar', data:{ labels:categoryRows.map(row=>row[0]), datasets:[{label:`Pengeluaran (${currency})`,data:categoryRows.map(row=>row[1]),backgroundColor:['#6366f1','#34d399','#f59e0b','#fb7185','#38bdf8','#a78bfa','#f97316'],borderRadius:8,borderSkipped:false,maxBarThickness:34}] },
+          options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',animation:window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches?false:{duration:650},plugins:{legend:{display:false},tooltip:{callbacks:{label:context=>formatMoney(context.raw,currency)}}},scales:{x:{beginAtZero:true,grid:{color:'rgba(148,163,184,.14)'},ticks:{callback:value=>new Intl.NumberFormat('id-ID',{notation:'compact',maximumFractionDigits:1}).format(value)}},y:{grid:{display:false}}}}
+        });
+      }
+      const list = document.getElementById('reportCategoryList');
+      if (!categoryRows.length) list.innerHTML = '<p class="rounded-xl bg-slate-50 p-4 text-xs text-slate-500">Belum ada pengeluaran pada periode dan mata uang ini.</p>';
+      else {
+        const max = categoryRows[0][1] || 1;
+        list.innerHTML = categoryRows.slice(0,6).map(([name,amount])=>`<div><div class="mb-1.5 flex items-center justify-between gap-3"><span class="truncate text-xs font-bold text-slate-700">${escapeHtml(name)}</span><span class="shrink-0 text-xs font-extrabold text-slate-800 money-value">${escapeHtml(formatMoney(amount,currency))}</span></div><div class="report-bar"><span style="width:${Math.max(2,Math.min(100,amount/max*100))}%"></span></div></div>`).join('');
+      }
+      setText('reportTransactionCount',`${monthRows.length} transaksi · ${new Intl.DateTimeFormat('id-ID',{month:'long',year:'numeric'}).format(new Date(`${monthKey}-01T12:00:00`))}`);
+      const recentHost = document.getElementById('reportTransactionsList');
+      const recent = [...monthRows].sort((a,b)=>String(b.transaction_date).localeCompare(String(a.transaction_date))||String(b.created_at||'').localeCompare(String(a.created_at||''))).slice(0,8);
+      if (!recent.length) recentHost.innerHTML = '<p class="rounded-xl bg-slate-50 p-4 text-xs text-slate-500">Belum ada transaksi pada periode ini.</p>';
+      else recentHost.innerHTML = recent.map(t=>`<div class="flex items-center gap-3 rounded-xl border border-slate-100 p-3"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${t.type==='income'?'bg-emerald-50 text-emerald-700':t.type==='expense'?'bg-rose-50 text-rose-700':'bg-indigo-50 text-indigo-700'} font-extrabold">${t.type==='income'?'↙':t.type==='expense'?'↗':'⇄'}</span><div class="min-w-0 flex-1"><p class="truncate text-xs font-extrabold text-slate-800">${escapeHtml(t.category)}</p><p class="mt-1 text-[10px] text-slate-400">${formatDate(t.transaction_date)} · ${escapeHtml(TYPE_LABELS[t.type]||t.type)}</p></div><p class="shrink-0 text-xs font-extrabold ${t.type==='income'?'text-emerald-700':t.type==='expense'?'text-rose-700':'text-indigo-700'} money-value">${t.type==='income'?'+':t.type==='expense'?'−':''}${escapeHtml(formatMoney(t.amount,t.currency))}</p></div>`).join('');
+    }
+
+    function exportMonthlyReportCsv() {
+      const monthKey = document.getElementById('reportMonth')?.value || currentMonthKey();
+      const currency = document.getElementById('reportCurrency')?.value || 'EGP';
+      const rows = transactions.filter(t=>String(t.transaction_date||'').slice(0,7)===monthKey && t.currency===currency);
+      if (!rows.length) return showToast('Tidak ada transaksi pada periode ini untuk diekspor.','info');
+      const headers = ['Tanggal','Jenis','Kategori','Nominal','Mata Uang','Catatan','Akun Sumber','Akun Tujuan'];
+      const cell = value => `"${String(value == null ? '' : value).replace(/"/g,'""')}"`;
+      const csv = [headers.map(cell).join(','),...rows.map(t=>[t.transaction_date,TYPE_LABELS[t.type]||t.type,t.category,t.amount,t.currency,t.note,accountById(t.source_account_id)?.name||'',accountById(t.destination_account_id)?.name||''].map(cell).join(','))].join('\r\n');
+      const blob = new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'});
+      const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href=url; link.download=`farhan-finance-laporan-${monthKey}-${currency}.csv`; document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(url);
+      showToast('Laporan CSV berhasil disiapkan.','success');
+    }
+
+    async function downloadBackupJson() {
+      if (!sb || !currentUser) return;
+      if (!v2SchemaReady || !v4SchemaReady) return showToast('Jalankan migrasi V2 dan V4 terlebih dahulu agar backup lengkap.', 'error');
+      showLoader('Menyiapkan backup data...');
+      try {
+        const { data:rates, error } = await sb.from('exchange_rates').select('*').order('rate_date',{ascending:true});
+        if (error) throw error;
+        const backup = {
+          app:'Farhan Finance', schemaVersion:4, exportedAt:new Date().toISOString(),
+          user:{id:currentUser.id,email:currentUser.email||''},
+          data:{profile:profileData,accounts,transactions,exchange_rates:rates||[],saving_goals:savingGoals,budgets,recurring_rules:recurringRules}
+        };
+        const blob = new Blob([JSON.stringify(backup,null,2)],{type:'application/json;charset=utf-8'});
+        const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href=url; link.download=`farhan-finance-backup-${localDateString(new Date())}.json`; document.body.appendChild(link); link.click(); link.remove(); URL.revokeObjectURL(url);
+        showToast('Backup JSON berhasil diunduh. Simpan di lokasi yang aman.','success');
+      } catch (error) { showToast(friendlyError(error),'error'); }
+      finally { hideLoader(); }
+    }
+
+    function pickBackupFields(rows, allowedFields, currentUserId) {
+      if (!Array.isArray(rows)) return [];
+      if (rows.length > 20000) throw new Error('Backup berisi terlalu banyak baris untuk dipulihkan sekaligus.');
+      return rows.filter(row=>row && typeof row==='object' && !Array.isArray(row)).map(row=>{
+        if (row.user_id && row.user_id !== currentUserId) throw new Error('Backup berisi data dengan pemilik berbeda. Proses dibatalkan.');
+        const clean = {};
+        allowedFields.forEach(key=>{ if (Object.prototype.hasOwnProperty.call(row,key)) clean[key]=row[key]; });
+        if ('user_id' in clean) clean.user_id = currentUserId;
+        return clean;
+      });
+    }
+
+    async function upsertBackupRows(table, rows) {
+      if (!rows || !rows.length) return;
+      for (let i=0;i<rows.length;i+=200) {
+        const { error } = await sb.from(table).upsert(rows.slice(i,i+200),{onConflict:'id'});
+        if (error) throw new Error(`Restore ${table}: ${friendlyError(error)}`);
+      }
+    }
+
+    async function restoreBackupJson(event) {
+      const input = event.target;
+      const file = input.files && input.files[0];
+      if (!file) return;
+      input.value = '';
+      if (file.size > 15*1024*1024) return showToast('File backup terlalu besar (maksimal 15 MB).','error');
+      if (!sb || !currentUser) return showToast('Login terlebih dahulu.','error');
+      if (!v2SchemaReady || !v4SchemaReady) return showToast('Jalankan migrasi V2 dan V4 terlebih dahulu.','error');
+      showLoader('Memvalidasi file backup...');
+      try {
+        const backup = JSON.parse(await file.text());
+        if (backup.app !== 'Farhan Finance' || Number(backup.schemaVersion) < 4 || !backup.data) throw new Error('Format backup tidak dikenal atau bukan backup Farhan Finance V4.');
+        if (!backup.user || backup.user.id !== currentUser.id) throw new Error('Backup hanya bisa dipulihkan ke akun Supabase yang sama dengan akun pembuat backup.');
+        const ok = confirm('Pulihkan backup Farhan Finance? Data dengan ID sama akan diperbarui dan data baru akan ditambahkan. Data yang tidak ada di backup tidak dihapus. Jika terjadi gangguan, kamu dapat mengulang file yang sama. Lanjutkan?');
+        if (!ok) return;
+        const data = backup.data;
+        const profile = data.profile && typeof data.profile==='object' ? [{
+          id:currentUser.id,email:currentUser.email||data.profile.email||'',full_name:data.profile.full_name||'',display_name:data.profile.display_name||'',avatar_path:data.profile.avatar_path||null,preferred_currency:data.profile.preferred_currency==='IDR'?'IDR':'EGP',monthly_saving_target:Number(data.profile.monthly_saving_target||0)
+        }] : [];
+        const accountsRows = pickBackupFields(data.accounts,['id','user_id','name','currency','account_type','opening_balance','created_at','updated_at'],currentUser.id);
+        const goalsRows = pickBackupFields(data.saving_goals,['id','user_id','title','currency','target_amount','deadline','icon','created_at','updated_at'],currentUser.id);
+        const budgetRows = pickBackupFields(data.budgets,['id','user_id','category','currency','month_start','amount_limit','created_at','updated_at'],currentUser.id);
+        const recurringRows = pickBackupFields(data.recurring_rules,['id','user_id','title','type','category','amount','currency','account_id','frequency','next_run_date','anchor_day','note','is_active','created_at','updated_at'],currentUser.id);
+        const rateRows = pickBackupFields(data.exchange_rates,['id','user_id','base_currency','quote_currency','rate','rate_date','note','created_at','updated_at'],currentUser.id);
+        const transactionRows = pickBackupFields(data.transactions,['id','user_id','type','category','amount','currency','transaction_date','note','source_account_id','destination_account_id','destination_amount','goal_id','recurring_rule_id','recurring_occurrence_date','created_at','updated_at'],currentUser.id);
+        if (accountsRows.some(r=>!r.id||!r.name||!['EGP','IDR'].includes(r.currency))) throw new Error('Data akun di file backup tidak valid.');
+        if (transactionRows.some(r=>!r.id||!r.type||!r.category||!Number.isFinite(Number(r.amount))||Number(r.amount)<=0||!['EGP','IDR'].includes(r.currency))) throw new Error('Ada transaksi backup dengan data tidak valid.');
+        showLoader('Memulihkan data secara bertahap...');
+        // Upsert in dependency order. No existing rows are deleted; retrying the same file is safe by ID.
+        await upsertBackupRows('accounts',accountsRows);
+        await upsertBackupRows('profiles',profile);
+        await upsertBackupRows('saving_goals',goalsRows);
+        await upsertBackupRows('budgets',budgetRows);
+        await upsertBackupRows('recurring_rules',recurringRows);
+        await upsertBackupRows('exchange_rates',rateRows);
+        await upsertBackupRows('transactions',transactionRows);
+        await loadData(false);
+        showToast(`Restore selesai: ${transactionRows.length} transaksi diproses.`, 'success');
+      } catch (error) {
+        showToast(error.message || friendlyError(error),'error');
+      } finally { hideLoader(); }
     }
 
     function exportTransactionsCsv() {
