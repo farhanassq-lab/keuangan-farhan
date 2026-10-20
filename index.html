@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#10152F">
-  <meta name="description" content="Farhan Finance V6.2 — PIN vault dengan animasi pintu, profil CV di dashboard, animasi perpindahan halaman, dan dukungan EGP-IDR.">
+  <meta name="description" content="Farhan Finance V6.3 — PIN-first login, profil CV di awal dashboard, editor terpisah, field kosong disembunyikan, dan perbaikan PWA mobile.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
-  <title>Farhan Finance — Personal Finance V6.2</title>
+  <title>Farhan Finance — Personal Finance V6.3</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -542,6 +542,21 @@
     @media(max-width:640px) { .pin-gate { padding:14px; } .pin-gate-card { padding:27px 20px 22px; border-radius:25px; } .pin-door::before { inset:5% 6%; } .pin-door::after { inset:12% 12%; } .pin-door-emblem { width:48px;height:48px;border-radius:16px;font-size:26px;top:12%; } .pin-door-handle { height:54px;width:6px; } }
     @media(prefers-reduced-motion:reduce) { .pin-gate *, .page-panel.active.page-transition-in, .page-panel.active.page-transition-in > * { animation:none !important; transition:none !important; } }
 
+
+    /* V6.3: mobile-first PIN entry, read-only CV on dashboard, separate profile studio. */
+    #page-dashboard #dashboardProfileSection { order:-1; }
+    #dashboardProfileSection .cv-contact-chip { max-width:100%; overflow-wrap:anywhere; }
+    #page-profile-edit .profile-editor-card { animation:ff-page-arrive .45s cubic-bezier(.2,.8,.2,1) both; }
+    #page-profile-edit .profile-editor-card input, #page-profile-edit .profile-editor-card textarea, #page-profile-edit .profile-editor-card select { min-height:46px; }
+    #pinActivationScreen button, #authActivationPanel button { touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+    .pin-input { font-size:24px; letter-spacing:.34em; -webkit-appearance:none; appearance:none; }
+    @media(max-width:640px) {
+      .pin-gate { min-height:100dvh; min-height:100svh; padding:12px; align-items:center; }
+      .pin-gate-card { width:min(100%,390px); max-height:calc(100dvh - 24px); overflow-y:auto; overscroll-behavior:contain; padding:24px 18px 20px; }
+      .pin-input { width:100%; letter-spacing:.26em; padding:15px 8px; }
+      #page-dashboard #dashboardProfileSection { scroll-margin-top:78px; }
+    }
+
 </style>
 </head>
 <body class="min-h-screen antialiased">
@@ -605,14 +620,23 @@
           <div><p class="font-display text-xl font-extrabold">farhan<span class="text-indigo-600">.</span></p><p class="text-xs text-slate-500">Personal finance</p></div>
         </div>
         <p class="tiny-label text-indigo-600">Selamat datang</p>
-        <h2 id="authTitle" class="mt-2 text-2xl font-extrabold">Masuk ke akunmu</h2>
-        <p id="authSubtitle" class="mt-2 text-sm leading-6 text-slate-500">Lanjutkan mengelola keuanganmu dengan aman.</p>
+        <h2 id="authTitle" class="mt-2 text-2xl font-extrabold">Farhan Finance terkunci</h2>
+        <p id="authSubtitle" class="mt-2 text-sm leading-6 text-slate-500">Login harian menggunakan PIN. Aktivasi akun hanya diperlukan sekali pada perangkat baru atau jika sesi Supabase hilang.</p>
 
         <div id="configWarning" class="mt-5 hidden rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm leading-5 text-amber-900">
           <strong>Supabase belum dikonfigurasi.</strong> Buka file <code>web/index.html</code> dan isi <code>SUPABASE_URL</code> serta <code>SUPABASE_ANON_KEY</code> sesuai Project Settings → API di Supabase.
         </div>
 
-        <div class="mt-6 grid grid-cols-1 rounded-xl bg-slate-100 p-1 auth-tabs-single">
+        <div id="pinActivationScreen" class="mt-6 rounded-3xl border border-blue-100 bg-gradient-to-br from-blue-50 via-white to-indigo-50 p-5 sm:p-6">
+          <div class="mx-auto mb-4 grid h-14 w-14 place-items-center rounded-2xl border border-blue-100 bg-white text-blue-700 shadow-sm"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><path d="M12 14v3"/></svg></div>
+          <p class="tiny-label text-center text-blue-600">PIN-FIRST ACCESS</p><h3 class="mt-2 text-center text-xl font-extrabold text-slate-900">Masuk dengan PIN</h3>
+          <p class="mt-2 text-center text-sm leading-6 text-slate-600">Pada perangkat yang sudah aktif, cukup masukkan PIN 6 digit. Perangkat ini belum memiliki sesi Supabase, jadi perlu aktivasi satu kali untuk menghubungkan data keuanganmu. Setelah aktif, layar harian kembali menggunakan PIN.</p>
+          <button type="button" onclick="showActivationForm()" class="btn-primary mt-5 w-full py-3">Aktifkan perangkat ini</button>
+          <p class="mt-3 text-center text-[11px] leading-5 text-slate-500">PIN mengunci aplikasi secara lokal. Supabase Auth dan RLS tetap melindungi database.</p>
+        </div>
+        <div id="authActivationPanel" class="hidden mt-6 rounded-3xl border border-blue-100 bg-white p-4 sm:p-5">
+          <div class="mb-4 flex items-start justify-between gap-3"><div><p class="tiny-label text-blue-600">AKTIVASI SEKALI</p><h3 class="mt-1 text-lg font-extrabold text-slate-900">Hubungkan perangkat</h3><p class="mt-1 text-xs leading-5 text-slate-500">Masukkan akun Supabase sekali untuk perangkat ini. Berikutnya gunakan PIN.</p></div><button type="button" onclick="hideActivationForm()" class="btn-quiet !px-3 !py-2 text-xs">Kembali</button></div>
+<div class="mt-6 grid grid-cols-1 rounded-xl bg-slate-100 p-1 auth-tabs-single">
           <button id="loginTab" type="button" class="rounded-lg bg-white px-3 py-2.5 text-sm font-bold text-indigo-700 shadow-sm" onclick="setAuthMode('login')">Masuk dengan akun</button>
           <button id="signupTab" type="button" class="hidden" onclick="setAuthMode('signup')">Buat akun</button>
         </div>
@@ -635,6 +659,7 @@
           <button id="authSubmit" class="btn-primary w-full py-3" type="submit">Masuk</button>
           <button type="button" class="w-full py-2 text-sm font-semibold text-slate-500 hover:text-indigo-700" onclick="resetPassword()">Lupa password?</button>
         </form>
+        </div>
         <p class="mt-7 text-center text-[11px] leading-5 text-slate-400">Dengan menggunakan Farhan Finance, kamu menyetujui penyimpanan data keuangan pada project Supabase yang kamu konfigurasi.</p>
       </section>
     </div>
@@ -656,6 +681,7 @@
         <button class="nav-link" data-page="goals" onclick="showPage('goals')"><span>◎</span> Target tabungan</button>
         <button class="nav-link" data-page="budgets" onclick="showPage('budgets')"><span>▤</span> Budget bulanan</button>
         <button class="nav-link" onclick="openDashboardProfile()"><span>◉</span> Perkenalan</button>
+        <button class="nav-link" data-page="profile-edit" onclick="showPage('profile-edit')"><span>✎</span> Edit profil</button>
         <button class="nav-link" data-page="settings" onclick="showPage('settings')"><span>⚙</span> Pengaturan</button>
         <p class="tiny-label mb-3 mt-6 px-3 text-slate-500">Perencanaan</p>
         <button class="nav-link" data-page="calendar" onclick="showPage('calendar')"><span>▦</span> Kalender keuangan</button>
@@ -701,6 +727,51 @@
 
       <main class="main-content mx-auto max-w-[1500px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <section id="page-dashboard" class="page-panel active space-y-6">
+          <section id="dashboardProfileSection" class="dashboard-profile-section space-y-6 scroll-mt-24">
+          <div class="profile-page-heading">
+            <p class="tiny-label text-blue-600">PERSONAL INTRODUCTION</p>
+            <h2 class="mt-2 text-2xl font-extrabold text-slate-900 sm:text-3xl">Profil & perkenalan</h2>
+            <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600">Buat halaman perkenalan seperti CV mini. Isi bagian yang kamu mau—tentang diri, pendidikan, pengalaman, keahlian, dan minat. Semua bagian perkenalan bersifat opsional.</p>
+            <div class="mt-4"><button type="button" onclick="openProfileEditor()" class="btn-primary !px-4 !py-2.5 text-sm">✎ Edit perkenalan</button></div>
+          </div>
+
+          <article class="cv-sheet overflow-hidden rounded-[28px] border border-blue-100 bg-white shadow-xl shadow-blue-950/5">
+            <div class="cv-cover relative overflow-hidden px-5 py-7 text-white sm:px-8 sm:py-9">
+              <div class="cv-cover-orb cv-orb-one"></div><div class="cv-cover-orb cv-orb-two"></div>
+              <div class="relative z-10 flex flex-col gap-5 sm:flex-row sm:items-center">
+                <div class="flex shrink-0 flex-col items-center gap-3 sm:items-start">
+                  <div class="avatar-frame cv-avatar h-28 w-28 sm:h-32 sm:w-32"><img id="profileAvatarPreview" class="avatar-img hidden" alt="Foto profil pengguna"><span id="profileAvatarFallback" class="avatar-fallback h-full w-full text-3xl">FF</span></div>
+                </div>
+                <div class="min-w-0 flex-1 text-center sm:text-left">
+                  <p class="tiny-label text-cyan-200">PROFILE / ABOUT ME</p>
+                  <h3 id="profilePreviewName" class="mt-2 break-words text-3xl font-extrabold tracking-tight sm:text-4xl">Nama kamu</h3>
+                  <p id="cvPreviewHeadline" class="mt-2 text-sm font-semibold leading-6 text-blue-100 sm:text-base">Tulis headline singkat tentang dirimu di formulir.</p>
+                  <div class="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+                    <span id="cvLocationChip" class="cv-contact-chip">⌖ <span id="cvPreviewLocation">Lokasi (opsional)</span></span>
+                    
+                    <a id="cvPreviewWebsiteLink" class="cv-contact-chip hidden" href="#" target="_blank" rel="noopener noreferrer">↗ Website / portfolio</a>
+                  </div>
+                  <p class="mt-4 text-xs leading-5 text-blue-100/70">Halaman perkenalan pribadi · Farhan Finance</p>
+                </div>
+              </div>
+            </div>
+            <div id="cvEmptyState" class="hidden border-t border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-6 sm:p-8"><div class="mx-auto max-w-xl text-center"><div class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-white text-2xl text-blue-600 shadow-sm">✦</div><h3 class="mt-4 text-lg font-extrabold text-slate-900">Perkenalanmu belum diisi</h3><p class="mt-2 text-sm leading-6 text-slate-600">Tambahkan hanya informasi yang ingin kamu tampilkan. Bagian yang kosong akan tetap disembunyikan.</p><button type="button" onclick="openProfileEditor()" class="btn-primary mt-4 !px-4 !py-2.5 text-sm">Mulai isi profil</button></div></div>
+            <div id="cvContentGrid" class="grid grid-cols-1 gap-0 md:grid-cols-[minmax(0,1.3fr)_minmax(240px,.7fr)]">
+              <div id="cvMainColumn" class="space-y-6 p-5 sm:p-7">
+                <section class="cv-content-section"><div class="cv-section-title"><span class="cv-section-icon">✦</span><div><p class="tiny-label text-blue-600">INTRODUCTION</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Tentang saya</h4></div></div><p id="cvPreviewBio" class="cv-preview-copy mt-3">Ceritakan dirimu dalam beberapa kalimat—misalnya latar belakang, hal yang kamu minati, dan tujuan yang ingin kamu capai.</p></section>
+                <section class="cv-content-section"><div class="cv-section-title"><span class="cv-section-icon">▤</span><div><p class="tiny-label text-blue-600">EDUCATION</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Pendidikan</h4></div></div><p id="cvPreviewEducation" class="cv-preview-copy mt-3">Tambahkan pendidikan, jurusan, institusi, atau tahun jika ingin ditampilkan.</p></section>
+                <section class="cv-content-section"><div class="cv-section-title"><span class="cv-section-icon">↗</span><div><p class="tiny-label text-blue-600">EXPERIENCE</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Pengalaman & aktivitas</h4></div></div><p id="cvPreviewExperience" class="cv-preview-copy mt-3">Tambahkan pengalaman kerja, magang, organisasi, proyek, atau aktivitas yang relevan.</p></section>
+              </div>
+              <aside id="cvSideColumn" class="cv-side-panel space-y-6 border-t border-blue-100 p-5 sm:p-7 md:border-l md:border-t-0">
+                <section class="cv-content-section"><div class="cv-section-title"><span class="cv-section-icon">✧</span><div><p class="tiny-label text-blue-600">SKILLS</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Keahlian</h4></div></div><p id="cvPreviewSkills" class="cv-preview-copy mt-3">Tuliskan keahlian yang kamu miliki, pisahkan dengan koma.</p></section>
+                <section class="cv-content-section"><div class="cv-section-title"><span class="cv-section-icon">♡</span><div><p class="tiny-label text-blue-600">INTERESTS</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Minat</h4></div></div><p id="cvPreviewInterests" class="cv-preview-copy mt-3">Tuliskan minat, bidang yang ingin dipelajari, atau hobi.</p></section>
+              </aside>
+            </div>
+          </article>
+
+          
+        </section>
+
           <div class="profile-hero card feature-card flex flex-col justify-between gap-4 p-4 sm:flex-row sm:items-center sm:p-5">
             <div class="flex min-w-0 items-center gap-4">
               <button type="button" onclick="openDashboardProfile()" class="avatar-frame h-[66px] w-[66px] soft-pulse" aria-label="Buka profil">
@@ -715,7 +786,7 @@
             </div>
             <div class="flex items-center justify-between gap-3 sm:flex-col sm:items-end">
               <p id="lastUpdated" class="text-[11px] text-slate-400">Memuat data...</p>
-              <button onclick="openDashboardProfile()" class="btn-quiet !px-3 !py-2 text-xs">Edit profil <span aria-hidden="true">↗</span></button>
+              <button onclick="openProfileEditor()" class="btn-quiet !px-3 !py-2 text-xs">Edit profil <span aria-hidden="true">↗</span></button>
             </div>
           </div>
 
@@ -813,52 +884,22 @@
         
 
           <!-- CV-style personal profile now lives on the dashboard -->
-          <section id="dashboardProfileSection" class="dashboard-profile-section space-y-6 scroll-mt-24">
-          <div class="profile-page-heading">
-            <p class="tiny-label text-blue-600">PERSONAL INTRODUCTION</p>
-            <h2 class="mt-2 text-2xl font-extrabold text-slate-900 sm:text-3xl">Profil & perkenalan</h2>
-            <p class="mt-2 max-w-2xl text-sm leading-6 text-slate-600">Buat halaman perkenalan seperti CV mini. Isi bagian yang kamu mau—tentang diri, pendidikan, pengalaman, keahlian, dan minat. Semua bagian perkenalan bersifat opsional.</p>
+          
+        </section>
+
+        <section id="page-profile-edit" class="page-panel space-y-5">
+          <div class="v4-feature-banner relative overflow-hidden rounded-3xl p-5 text-white shadow-lg sm:p-7">
+            <div class="absolute -right-8 -top-10 h-40 w-40 rounded-full border border-white/10"></div><div class="absolute right-20 top-20 h-20 w-20 rounded-full bg-cyan-300/10 blur-2xl"></div>
+            <div class="relative flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div><p class="tiny-label text-cyan-200">PROFILE STUDIO</p><h2 class="mt-2 text-2xl font-extrabold sm:text-3xl">Edit profil & perkenalan</h2><p class="mt-2 max-w-xl text-sm leading-6 text-indigo-100/80">Atur foto dan isi CV di sini. Dashboard hanya menampilkan bagian yang sudah kamu isi.</p></div><button type="button" class="rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-sm font-bold transition hover:bg-white/15" onclick="openDashboardProfile()">← Kembali ke dashboard</button></div>
           </div>
-
-          <article class="cv-sheet overflow-hidden rounded-[28px] border border-blue-100 bg-white shadow-xl shadow-blue-950/5">
-            <div class="cv-cover relative overflow-hidden px-5 py-7 text-white sm:px-8 sm:py-9">
-              <div class="cv-cover-orb cv-orb-one"></div><div class="cv-cover-orb cv-orb-two"></div>
-              <div class="relative z-10 flex flex-col gap-5 sm:flex-row sm:items-center">
-                <div class="flex shrink-0 flex-col items-center gap-3 sm:items-start">
-                  <div class="avatar-frame cv-avatar h-28 w-28 sm:h-32 sm:w-32"><img id="profileAvatarPreview" class="avatar-img hidden" alt="Foto profil pengguna"><span id="profileAvatarFallback" class="avatar-fallback h-full w-full text-3xl">FF</span></div>
-                  <label for="avatarFile" class="cv-upload-button inline-flex cursor-pointer items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-xs font-extrabold text-white backdrop-blur-md transition hover:bg-white/20">↑ Unggah foto</label>
-                  <input id="avatarFile" class="sr-only" type="file" accept="image/png,image/jpeg,image/webp" onchange="uploadAvatar(event)">
-                  <p class="text-[10px] text-blue-100/75">PNG, JPG, WEBP · maks. 3 MB</p>
-                </div>
-                <div class="min-w-0 flex-1 text-center sm:text-left">
-                  <p class="tiny-label text-cyan-200">PROFILE / ABOUT ME</p>
-                  <h3 id="profilePreviewName" class="mt-2 break-words text-3xl font-extrabold tracking-tight sm:text-4xl">Nama kamu</h3>
-                  <p id="cvPreviewHeadline" class="mt-2 text-sm font-semibold leading-6 text-blue-100 sm:text-base">Tulis headline singkat tentang dirimu di formulir.</p>
-                  <div class="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-                    <span id="cvLocationChip" class="cv-contact-chip">⌖ <span id="cvPreviewLocation">Lokasi (opsional)</span></span>
-                    <span class="cv-contact-chip">✉ <span id="profilePreviewEmail">—</span></span>
-                    <a id="cvPreviewWebsiteLink" class="cv-contact-chip hidden" href="#" target="_blank" rel="noopener noreferrer">↗ Website / portfolio</a>
-                  </div>
-                  <p class="mt-4 text-xs leading-5 text-blue-100/70">Halaman perkenalan pribadi · Farhan Finance</p>
-                </div>
-              </div>
-            </div>
-            <div class="grid grid-cols-1 gap-0 md:grid-cols-[minmax(0,1.3fr)_minmax(240px,.7fr)]">
-              <div class="space-y-6 p-5 sm:p-7">
-                <section class="cv-content-section"><div class="cv-section-title"><span class="cv-section-icon">✦</span><div><p class="tiny-label text-blue-600">INTRODUCTION</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Tentang saya</h4></div></div><p id="cvPreviewBio" class="cv-preview-copy mt-3">Ceritakan dirimu dalam beberapa kalimat—misalnya latar belakang, hal yang kamu minati, dan tujuan yang ingin kamu capai.</p></section>
-                <section class="cv-content-section"><div class="cv-section-title"><span class="cv-section-icon">▤</span><div><p class="tiny-label text-blue-600">EDUCATION</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Pendidikan</h4></div></div><p id="cvPreviewEducation" class="cv-preview-copy mt-3">Tambahkan pendidikan, jurusan, institusi, atau tahun jika ingin ditampilkan.</p></section>
-                <section class="cv-content-section"><div class="cv-section-title"><span class="cv-section-icon">↗</span><div><p class="tiny-label text-blue-600">EXPERIENCE</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Pengalaman & aktivitas</h4></div></div><p id="cvPreviewExperience" class="cv-preview-copy mt-3">Tambahkan pengalaman kerja, magang, organisasi, proyek, atau aktivitas yang relevan.</p></section>
-              </div>
-              <aside class="cv-side-panel space-y-6 border-t border-blue-100 p-5 sm:p-7 md:border-l md:border-t-0">
-                <section><div class="cv-section-title"><span class="cv-section-icon">✧</span><div><p class="tiny-label text-blue-600">SKILLS</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Keahlian</h4></div></div><p id="cvPreviewSkills" class="cv-preview-copy mt-3">Tuliskan keahlian yang kamu miliki, pisahkan dengan koma.</p></section>
-                <section><div class="cv-section-title"><span class="cv-section-icon">♡</span><div><p class="tiny-label text-blue-600">INTERESTS</p><h4 class="mt-1 text-base font-extrabold text-slate-900">Minat</h4></div></div><p id="cvPreviewInterests" class="cv-preview-copy mt-3">Tuliskan minat, bidang yang ingin dipelajari, atau hobi.</p></section>
-                <div class="rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50 p-4"><p class="text-xs font-extrabold text-blue-900">Tips mengisi profil</p><p class="mt-2 text-xs leading-5 text-blue-800">Gunakan kalimat singkat dan jujur. Kamu bisa mengosongkan bagian yang belum ingin ditampilkan.</p></div>
-              </aside>
-            </div>
-          </article>
-
           <article class="card profile-editor-card p-5 sm:p-7">
             <div class="mb-5 flex flex-col gap-3 border-b border-blue-100 pb-5 sm:flex-row sm:items-center sm:justify-between"><div><p class="tiny-label text-blue-600">EDIT YOUR PROFILE</p><h3 class="mt-1 text-xl font-extrabold text-slate-900">Isi informasi perkenalan</h3><p class="mt-1 text-sm text-slate-600">Ketik teksmu sendiri. Pratinjau di atas akan berubah langsung sebelum disimpan.</p></div><span class="rounded-full border border-blue-100 bg-blue-50 px-3 py-1.5 text-xs font-extrabold text-blue-700">CV mini</span></div>
+            
+            <div class="mb-5 flex flex-col gap-4 rounded-2xl border border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 sm:flex-row sm:items-center">
+              <div class="avatar-frame h-20 w-20 shrink-0"><img id="profileEditAvatarPreview" class="avatar-img hidden" alt="Pratinjau foto profil"><span id="profileEditAvatarFallback" class="avatar-fallback h-full w-full text-xl">FF</span></div>
+              <div class="min-w-0 flex-1"><h4 class="font-extrabold text-slate-900">Foto profil</h4><p class="mt-1 text-xs leading-5 text-slate-600">Pilih foto JPG, PNG, atau WEBP dengan ukuran maksimal 3 MB.</p><label for="avatarFile" class="btn-quiet mt-3 inline-flex cursor-pointer items-center gap-2 !px-3 !py-2 text-xs">↑ Unggah / ganti foto</label><input id="avatarFile" class="sr-only" type="file" accept="image/png,image/jpeg,image/webp" onchange="uploadAvatar(event)"></div>
+            </div>
+
             <form id="profileForm" class="space-y-6" onsubmit="saveProfile(event)">
               <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div><label for="profileDisplayName" class="mb-1.5 block text-xs">Nama lengkap / nama tampilan *</label><input id="profileDisplayName" class="field" maxlength="80" required placeholder="Tulis nama yang ingin ditampilkan"></div>
@@ -877,7 +918,6 @@
               <div class="flex flex-col gap-3 border-t border-blue-100 pt-5 sm:flex-row"><button id="saveProfileBtn" class="btn-primary w-full sm:flex-1" type="submit">Simpan profil & perkenalan</button><button type="button" onclick="showPage('settings')" class="btn-quiet">Pengaturan akun & kurs</button><button type="button" onclick="signOut()" class="btn-quiet">Keluar akun</button></div>
             </form>
           </article>
-        </section>
         </section>
 
         <section id="page-calendar" class="page-panel space-y-5">
@@ -1035,6 +1075,7 @@
       <button class="mobile-menu-item" data-page="goals" onclick="showPage('goals')"><span class="menu-icon">◎</span><span>Target</span></button>
       <button class="mobile-menu-item" data-page="budgets" onclick="showPage('budgets')"><span class="menu-icon">▤</span><span>Budget</span></button>
       <button class="mobile-menu-item" onclick="openDashboardProfile()"><span class="menu-icon">◉</span><span>Perkenalan</span></button>
+      <button class="mobile-menu-item" data-page="profile-edit" onclick="showPage('profile-edit')"><span class="menu-icon">✎</span><span>Edit profil</span></button>
       <button class="mobile-menu-item" data-page="recurring" onclick="showPage('recurring')"><span class="menu-icon">↻</span><span>Transaksi rutin</span></button>
       <button class="mobile-menu-item" data-page="reports" onclick="showPage('reports')"><span class="menu-icon">▥</span><span>Laporan</span></button>
       <button class="mobile-menu-item" data-page="settings" onclick="showPage('settings')"><span class="menu-icon">⚙</span><span>Pengaturan</span></button>
@@ -1191,7 +1232,7 @@
       document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal('transactionModal'); closeModal('accountModal'); toggleMobileMenu(false); } });
 
       if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-        navigator.serviceWorker.register('./sw.js').catch(err => console.warn('Service worker registration failed:', err));
+        navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then(registration => registration.update()).catch(err => console.warn('Service worker registration failed:', err));
       }
 
       if (!SUPABASE_CONFIGURED || !sb) {
@@ -1228,6 +1269,10 @@
         document.getElementById('authScreen').classList.remove('hidden');
         document.getElementById('appShell').classList.add('hidden');
         document.getElementById('mobileNav').classList.add('hidden');
+        document.getElementById('pinActivationScreen')?.classList.remove('hidden');
+        document.getElementById('authActivationPanel')?.classList.add('hidden');
+        setText('authTitle', 'Farhan Finance terkunci');
+        setText('authSubtitle', 'Login harian menggunakan PIN. Aktivasi akun hanya diperlukan sekali pada perangkat baru atau jika sesi Supabase hilang.');
         return;
       }
 
@@ -1399,6 +1444,21 @@
       }
     }
 
+    function showActivationForm() {
+      document.getElementById('pinActivationScreen')?.classList.add('hidden');
+      document.getElementById('authActivationPanel')?.classList.remove('hidden');
+      setText('authTitle', 'Aktivasi perangkat');
+      setText('authSubtitle', 'Verifikasi akun Supabase satu kali. Setelah sesi tersimpan, login harian menggunakan PIN.');
+      document.getElementById('authEmail')?.focus({ preventScroll: true });
+    }
+
+    function hideActivationForm() {
+      document.getElementById('authActivationPanel')?.classList.add('hidden');
+      document.getElementById('pinActivationScreen')?.classList.remove('hidden');
+      setText('authTitle', 'Farhan Finance terkunci');
+      setText('authSubtitle', 'Login harian menggunakan PIN. Aktivasi akun hanya diperlukan sekali pada perangkat baru atau jika sesi Supabase hilang.');
+    }
+
     function setAuthMode(mode) {
       authMode = mode;
       const signup = mode === 'signup';
@@ -1565,6 +1625,12 @@
       }, 140);
     }
 
+    function openProfileEditor() {
+      if (!currentUser) return showToast('Aktifkan perangkat dan buka PIN terlebih dahulu.', 'info');
+      renderProfileHeader();
+      showPage('profile-edit');
+    }
+
     function showPage(page) {
       if (page === 'profile') { openDashboardProfile(); return; }
       activePage = page;
@@ -1585,12 +1651,14 @@
         settings: ['PREFERENSI', 'Pengaturan'],
         calendar: ['MONEY TIMELINE', 'Kalender keuangan'],
         recurring: ['RECURRING PLANS', 'Transaksi berulang'],
-        reports: ['MONTHLY REVIEW', 'Laporan bulanan']
+        reports: ['MONTHLY REVIEW', 'Laporan bulanan'],
+        'profile-edit': ['PROFILE STUDIO', 'Edit profil']
       };
       const title = titles[page] || titles.dashboard;
       setText('pageEyebrow', title[0]);
       setText('pageTitle', title[1]);
       if (page === 'dashboard') renderCharts();
+      if (page === 'profile-edit') renderProfileHeader();
       if (page === 'calendar') renderCalendar();
       if (page === 'recurring') renderRecurringRules();
       if (page === 'reports') renderReport();
@@ -2295,9 +2363,9 @@
       if (preferred && profileData && ['EGP', 'IDR'].includes(profileData.preferred_currency)) preferred.value = profileData.preferred_currency;
       const targetInput = document.getElementById('monthlySavingTarget');
       if (targetInput && profileData) targetInput.value = Number(profileData.monthly_saving_target || 0) || '';
-      const fallbackIds = ['dashboardAvatarFallback', 'profileAvatarFallback'];
+      const fallbackIds = ['dashboardAvatarFallback', 'profileAvatarFallback', 'profileEditAvatarFallback'];
       fallbackIds.forEach(id => setText(id, initialsFor(name)));
-      const imageIds = ['dashboardAvatar', 'profileAvatarPreview'];
+      const imageIds = ['dashboardAvatar', 'profileAvatarPreview', 'profileEditAvatarPreview'];
       imageIds.forEach(id => {
         const image = document.getElementById(id);
         if (!image) return;
@@ -2320,39 +2388,60 @@
     function renderCvPreviewFromForm() {
       const valueFrom = (id, key) => {
         const input = document.getElementById(id);
-        if (input) return input.value.trim();
+        if (input) return String(input.value || '').trim();
         return String((profileData && profileData[key]) || '').trim();
-      };
-      const previewText = (previewId, value, placeholder) => {
-        const el = document.getElementById(previewId);
-        if (!el) return;
-        el.textContent = value || placeholder;
-        el.classList.toggle('cv-placeholder', !value);
       };
       const name = valueFrom('profileDisplayName','display_name') || profileDisplayName();
       setText('profilePreviewName', name);
-      previewText('cvPreviewHeadline', valueFrom('profileHeadline','headline'), 'Headline singkat tentang dirimu akan tampil di sini.');
-      previewText('cvPreviewLocation', valueFrom('profileLocation','location'), 'Lokasi (opsional)');
-      previewText('cvPreviewBio', valueFrom('profileBio','bio'), 'Ceritakan dirimu dalam beberapa kalimat—misalnya latar belakang, hal yang kamu minati, dan tujuan yang ingin kamu capai.');
-      previewText('cvPreviewEducation', valueFrom('profileEducation','education'), 'Tambahkan pendidikan, jurusan, institusi, atau tahun jika ingin ditampilkan.');
-      previewText('cvPreviewExperience', valueFrom('profileExperience','experience'), 'Tambahkan pengalaman kerja, magang, organisasi, proyek, atau aktivitas yang relevan.');
-      previewText('cvPreviewSkills', valueFrom('profileSkills','skills'), 'Tuliskan keahlian yang kamu miliki, pisahkan dengan koma.');
-      previewText('cvPreviewInterests', valueFrom('profileInterests','interests'), 'Tuliskan minat, bidang yang ingin dipelajari, atau hobi.');
+
+      const fields = {
+        headline: valueFrom('profileHeadline','headline'),
+        location: valueFrom('profileLocation','location'),
+        website: valueFrom('profileWebsite','website_url'),
+        bio: valueFrom('profileBio','bio'),
+        education: valueFrom('profileEducation','education'),
+        experience: valueFrom('profileExperience','experience'),
+        skills: valueFrom('profileSkills','skills'),
+        interests: valueFrom('profileInterests','interests')
+      };
+      const setOptionalText = (id, value) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = value;
+        el.classList.remove('cv-placeholder');
+        const section = el.closest('.cv-content-section');
+        if (section) section.classList.toggle('hidden', !value);
+        else el.classList.toggle('hidden', !value);
+      };
+      setOptionalText('cvPreviewHeadline', fields.headline);
+      setOptionalText('cvPreviewLocation', fields.location);
+      setOptionalText('cvPreviewBio', fields.bio);
+      setOptionalText('cvPreviewEducation', fields.education);
+      setOptionalText('cvPreviewExperience', fields.experience);
+      setOptionalText('cvPreviewSkills', fields.skills);
+      setOptionalText('cvPreviewInterests', fields.interests);
+
       const locationChip = document.getElementById('cvLocationChip');
-      if (locationChip) locationChip.classList.toggle('hidden', !valueFrom('profileLocation','location'));
-      const websiteValue = valueFrom('profileWebsite','website_url');
+      if (locationChip) locationChip.classList.toggle('hidden', !fields.location);
       const websiteLink = document.getElementById('cvPreviewWebsiteLink');
       if (websiteLink) {
         let safeUrl = '';
-        if (websiteValue) {
+        if (fields.website) {
           try {
-            const parsed = new URL(websiteValue);
+            const parsed = new URL(fields.website);
             if (parsed.protocol === 'https:' || parsed.protocol === 'http:') safeUrl = parsed.href;
           } catch (_) {}
         }
         websiteLink.href = safeUrl || '#';
         websiteLink.classList.toggle('hidden', !safeUrl);
       }
+      const mainHasContent = Boolean(fields.bio || fields.education || fields.experience);
+      const sideHasContent = Boolean(fields.skills || fields.interests);
+      const anyContent = Boolean(fields.headline || fields.location || fields.website || mainHasContent || sideHasContent);
+      document.getElementById('cvMainColumn')?.classList.toggle('hidden', !mainHasContent);
+      document.getElementById('cvSideColumn')?.classList.toggle('hidden', !sideHasContent);
+      document.getElementById('cvContentGrid')?.classList.toggle('hidden', !(mainHasContent || sideHasContent));
+      document.getElementById('cvEmptyState')?.classList.toggle('hidden', anyContent);
       const bioCounter = document.getElementById('profileBioCount');
       const bioField = document.getElementById('profileBio');
       if (bioCounter && bioField) setText('profileBioCount', bioField.value.length);

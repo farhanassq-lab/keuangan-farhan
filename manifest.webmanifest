@@ -1,8 +1,8 @@
 {
   "id": "./",
-  "name": "Farhan Finance — PIN Vault & Keuangan Pribadi V6.2",
+  "name": "Farhan Finance — PIN-first & CV Dashboard V6.3",
   "short_name": "Farhan Finance",
-  "description": "Farhan Finance V6.2: PIN vault dengan animasi pintu, profil CV di dashboard, animasi perpindahan halaman, dan dukungan EGP serta IDR.",
+  "description": "Farhan Finance V6.3: login harian PIN, profil CV di awal dashboard, editor terpisah, dan tampilan mobile yang diperbaiki.",
   "lang": "id-ID",
   "start_url": "./index.html",
   "scope": "./",

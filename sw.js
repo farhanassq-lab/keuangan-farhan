@@ -1,4 +1,4 @@
-const CACHE_NAME = 'farhan-finance-shell-v6-1';
+const CACHE_NAME = 'farhan-finance-shell-v6-3';
 const APP_SHELL = [
   './',
   './index.html',
@@ -27,13 +27,26 @@ self.addEventListener('fetch', event => {
   const request = event.request;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
-  // Only cache the app shell on this origin. API calls and CDN assets use the network.
   if (url.origin !== self.location.origin) return;
+
+  const isNavigation = request.mode === 'navigate' || url.pathname.endsWith('/index.html') || url.pathname.endsWith('/');
+  if (isNavigation) {
+    event.respondWith(
+      fetch(request, { cache: 'no-store' }).then(response => {
+        if (response && response.ok) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+        }
+        return response;
+      }).catch(() => caches.match(request).then(cached => cached || caches.match('./index.html')))
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(request).then(cached => cached || fetch(request).then(response => {
-      if (response && response.ok && (url.pathname.endsWith('/index.html') || url.pathname.endsWith('/manifest.webmanifest') || url.pathname.includes('/icons/'))) {
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+      if (response && response.ok && (url.pathname.endsWith('/manifest.webmanifest') || url.pathname.includes('/icons/'))) {
+        caches.open(CACHE_NAME).then(cache => cache.put(request, response.clone()));
       }
       return response;
     }))
